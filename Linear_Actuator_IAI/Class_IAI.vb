@@ -182,6 +182,11 @@ Public Class Class_IAI
 
 
     End Sub
+    Friend Sub IAI_ResetError()
+        If MPortIAI.IsOpen Then
+            MPortIAI.Write(IAI_Reset_Error())
+        End If
+    End Sub
     Friend Sub IAI_Send_Check_Status()
 
         IAI_SendCommandCheck = ""
@@ -225,10 +230,11 @@ Public Class Class_IAI
             '----------------
             'If blExit = True Then Exit Sub
             '----------------
+            IAI_Send_Check_Status()
 
             If ReadySend = True Then
 
-                IAI_Send_Check_Status()
+
                 Delay(20)
                 CountCommand += 1
                 If CountCommand > 50 Then Return False
@@ -243,7 +249,7 @@ Public Class Class_IAI
         Return True
 
     End Function
-    Friend Function Position_IAI(axis As String, ByVal PosiZ As String)
+    Friend Function Position_IAI(axis As String, ByVal PosiY As String, ByVal PosiX As String)
 
         Dim ReSendCmd As Integer = 0
 
@@ -259,11 +265,19 @@ startt:
         Try
 
             IAI_SendCommandCheck = ""
-            If Val(PosiZ) <= 500 Then
-                If MPortIAI.IsOpen Then
+            If Val(PosiX) >= 500 Or Val(PosiX) < -1 Then
+                Form1.LbStatusDisplay.Text = "X Position Over Limit"
+                Exit Function
+            ElseIf Val(PosiY) >= 22 Or Val(PosiY) < -1 Then
+                Form1.LbStatusDisplay.Text = "Y Position Over Limit"
+                Exit Function
+            End If
 
-                    IAI_SendCommandCheck = Mid(Trim(XYZMove(axis, 0, Val(PosiZ.Trim), Val(PosiZ.Trim), Form1.Speedtextbox.Text, 0.5)), 4, 3)
-                    MPortIAI.Write(XYZMove(axis, 0, Val(PosiZ.Trim), Val(PosiZ.Trim), Form1.Speedtextbox.Text, 0.5))
+
+            If MPortIAI.IsOpen Then
+
+                    IAI_SendCommandCheck = Mid(Trim(XYZMove(axis, 0, Val(PosiY.Trim), Val(PosiX.Trim), Form1.Speedtextbox.Text, 0.5)), 4, 3)
+                    MPortIAI.Write(XYZMove(axis, 0, Val(PosiY.Trim), Val(PosiX.Trim), Form1.Speedtextbox.Text, 0.5))
 
 
                     Delay(20)
@@ -271,8 +285,8 @@ startt:
 
                     Try
                         MPortIAI.Open()
-                        IAI_SendCommandCheck = Mid(Trim(XYZMove(axis, 0, Val(PosiZ.Trim), Val(PosiZ.Trim), Form1.Speedtextbox.Text, 0.5)), 4, 3)
-                        MPortIAI.Write(XYZMove(axis, 0, Val(PosiZ.Trim), Val(PosiZ.Trim), Form1.Speedtextbox.Text, 0.5))
+                        IAI_SendCommandCheck = Mid(Trim(XYZMove(axis, 0, Val(PosiY.Trim), Val(PosiX.Trim), Form1.Speedtextbox.Text, 0.5)), 4, 3)
+                        MPortIAI.Write(XYZMove(axis, 0, Val(PosiY.Trim), Val(PosiX.Trim), Form1.Speedtextbox.Text, 0.5))
 
                         Delay(20)
                     Catch ex As Exception
@@ -283,12 +297,7 @@ startt:
                     End Try
 
                 End If
-            Else
-                'Form1.red_blink()
-                ' LampRed_ON()
-                Form1.LbStatusDisplay.Text = "Position Over Limit"
 
-            End If
 
         Catch ex As Exception
 
@@ -324,7 +333,7 @@ startt:
             End Try
 
         End If
-        ReadySend = False
+
     End Function
     Friend Function JogFW_IAI(axis As String, ByVal PosiZ As String)
 
@@ -334,16 +343,16 @@ startt:
 
 
 
-                IAI_SendCommandCheck = Mid(Trim(JogInDec(axis, 0.5, Form1.Speedtextbox.Text, 0, True)), 4, 3)
-                MPortIAI.Write(JogInDec(axis, 0.5, Form1.Speedtextbox.Text, 0, True))
+                IAI_SendCommandCheck = Mid(Trim(JogInDec(axis, 0.3, Form1.Speedtextbox.Text, 0, True)), 4, 3)
+                MPortIAI.Write(JogInDec(axis, 0.3, Form1.Speedtextbox.Text, 0, True))
                 Delay(20)
             Else
 
                 Try
                     MPortIAI.Open()
 
-                    IAI_SendCommandCheck = Mid(Trim(JogInDec(axis, 0.5, Form1.Speedtextbox.Text, 0, True)), 4, 3)
-                    MPortIAI.Write(JogInDec(axis, 0.5, Form1.Speedtextbox.Text, 0, True))
+                    IAI_SendCommandCheck = Mid(Trim(JogInDec(axis, 0.3, Form1.Speedtextbox.Text, 0, True)), 4, 3)
+                    MPortIAI.Write(JogInDec(axis, 0.3, Form1.Speedtextbox.Text, 0, True))
                     Delay(20)
                 Catch ex As Exception
 
@@ -739,6 +748,12 @@ startt:
         Return allResult
 
     End Function
+    Function IAI_Reset_Error()
+
+        Dim scHex As String = CheckSum("!0025B") ' Compute checksum
+        Return "!0025B" + scHex + vbCr + vbLf
+    End Function
+
 
 #End Region
 

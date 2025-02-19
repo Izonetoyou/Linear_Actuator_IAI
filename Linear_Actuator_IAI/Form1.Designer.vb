@@ -53,6 +53,7 @@ Partial Class Form1
         Me.LbStatusDisplay = New System.Windows.Forms.Label()
         Me.BtCon_IAI = New System.Windows.Forms.Button()
         Me.bt_jogorfast = New System.Windows.Forms.Button()
+        Me.Bt_reset = New System.Windows.Forms.Button()
         Me.StatusStrip1.SuspendLayout()
         CType(Me.SpeedTeackbar, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -173,7 +174,7 @@ Partial Class Form1
         Me.BtY_P_MOVE.Name = "BtY_P_MOVE"
         Me.BtY_P_MOVE.Size = New System.Drawing.Size(110, 37)
         Me.BtY_P_MOVE.TabIndex = 187
-        Me.BtY_P_MOVE.Tag = "010"
+        Me.BtY_P_MOVE.Tag = "Y"
         Me.BtY_P_MOVE.Text = "Y Jog +"
         Me.BtY_P_MOVE.UseVisualStyleBackColor = False
         '
@@ -184,7 +185,7 @@ Partial Class Form1
         Me.BtY_N_MOVE.Name = "BtY_N_MOVE"
         Me.BtY_N_MOVE.Size = New System.Drawing.Size(110, 37)
         Me.BtY_N_MOVE.TabIndex = 186
-        Me.BtY_N_MOVE.Tag = "010"
+        Me.BtY_N_MOVE.Tag = "Y"
         Me.BtY_N_MOVE.Text = "Y Jog -"
         Me.BtY_N_MOVE.UseVisualStyleBackColor = False
         '
@@ -195,7 +196,7 @@ Partial Class Form1
         Me.BtX_N_MOVE.Name = "BtX_N_MOVE"
         Me.BtX_N_MOVE.Size = New System.Drawing.Size(110, 38)
         Me.BtX_N_MOVE.TabIndex = 185
-        Me.BtX_N_MOVE.Tag = "001"
+        Me.BtX_N_MOVE.Tag = "X"
         Me.BtX_N_MOVE.Text = "X Jog -"
         Me.BtX_N_MOVE.UseVisualStyleBackColor = False
         '
@@ -206,7 +207,7 @@ Partial Class Form1
         Me.BtX_P_MOVE.Name = "BtX_P_MOVE"
         Me.BtX_P_MOVE.Size = New System.Drawing.Size(110, 38)
         Me.BtX_P_MOVE.TabIndex = 184
-        Me.BtX_P_MOVE.Tag = "001"
+        Me.BtX_P_MOVE.Tag = "X"
         Me.BtX_P_MOVE.Text = "X Jog +"
         Me.BtX_P_MOVE.UseVisualStyleBackColor = False
         '
@@ -301,6 +302,7 @@ Partial Class Form1
         '
         'TimerIAI
         '
+        Me.TimerIAI.Interval = 80
         '
         'SpeedTeackbar
         '
@@ -338,14 +340,25 @@ Partial Class Form1
         Me.bt_jogorfast.Name = "bt_jogorfast"
         Me.bt_jogorfast.Size = New System.Drawing.Size(99, 25)
         Me.bt_jogorfast.TabIndex = 214
-        Me.bt_jogorfast.Text = "Jog"
+        Me.bt_jogorfast.Text = "Fast"
         Me.bt_jogorfast.UseVisualStyleBackColor = True
+        '
+        'Bt_reset
+        '
+        Me.Bt_reset.BackColor = System.Drawing.Color.GreenYellow
+        Me.Bt_reset.Location = New System.Drawing.Point(475, 12)
+        Me.Bt_reset.Name = "Bt_reset"
+        Me.Bt_reset.Size = New System.Drawing.Size(142, 66)
+        Me.Bt_reset.TabIndex = 215
+        Me.Bt_reset.Text = "Reset"
+        Me.Bt_reset.UseVisualStyleBackColor = False
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(696, 567)
+        Me.Controls.Add(Me.Bt_reset)
         Me.Controls.Add(Me.BtCon_IAI)
         Me.Controls.Add(Me.bt_jogorfast)
         Me.Controls.Add(Me.BtEnable_IAI)
@@ -413,4 +426,5 @@ Partial Class Form1
     Friend WithEvents LbStatusDisplay As Label
     Friend WithEvents BtCon_IAI As Button
     Friend WithEvents bt_jogorfast As Button
+    Friend WithEvents Bt_reset As Button
 End Class

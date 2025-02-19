@@ -85,6 +85,7 @@
 
             End If
         End If
+
     End Sub
     Private Sub BtHome_IAI_Click(sender As Object, e As EventArgs) Handles BtHome_IAI.Click
         BtHome_IAI.Enabled = False
@@ -121,7 +122,7 @@
         Else
             lbStatusY.Text = "Y = Busy !"
         End If
-
+        Class_IAI.IAI_Check_Position = ChkShoPosi.Checked
         If Class_IAI.IAI_Check_Position = True Or ChkShoPosi.Checked = True Then  'Class_IAI.IAI_Check_Position = True Or
 
             lblXPosition.Text = Class_IAI.IAIxPosition
@@ -154,43 +155,73 @@
 
 
     Private Sub Bt_P_MOVE_MouseDown(sender As Object, e As MouseEventArgs) Handles BtX_P_MOVE.MouseDown, BtY_P_MOVE.MouseDown
-        Dim axis As String = CType(sender, Button).Tag.ToString()
+        Dim axis As String = Class_Var.IAI.Axis
+        Dim axisbt As String = CType(sender, Button).Tag.ToString()
+        Dim PosiX As Double = CDbl(lblXPosition.Text)
+        Dim PosiY As Double = CDbl(lblYPosition.Text)
+        Dim PosiZ As Double = CDbl(lblZPosition.Text)
+
+
         If bt_jogorfast.Text = "Jog" Then
 
-            Dim n As Double
-            If axis = "001" Then
-                n = CDbl(lblXPosition.Text)
-            ElseIf axis = "010" Then
-                n = CDbl(lblYPosition.Text)
+            If axisbt = "X" Then
+                PosiX = CDbl(lblXPosition.Text)
+                axis = "001"
+                ClsIAI.JogFW_IAI(axis, PosiX)
+            ElseIf axisbt = "Y" Then
+                PosiY = CDbl(lblYPosition.Text)
+                axis = "010"
+                ClsIAI.JogFW_IAI(axis, PosiY)
+            Else
+                PosiZ = CDbl(lblZPosition.Text)
+                axis = "100"
+                ClsIAI.JogFW_IAI(axis, PosiZ)
             End If
 
 
-            ClsIAI.JogFW_IAI(axis, n)
 
         Else
             Class_IAI.IAI_Check_Position = True
-            Dim n As Double
-            If axis = "001" Then
-                n = CDbl(lblXPosition.Text) + CDbl(CboStep_Pos_IAI.Text)
-            ElseIf axis = "010" Then
-                n = CDbl(lblYPosition.Text) + CDbl(CboStep_Pos_IAI.Text)
+
+            If axisbt = "X" Then
+                PosiX = CDbl(lblXPosition.Text) + CDbl(CboStep_Pos_IAI.Text)
+            ElseIf axisbt = "Y" Then
+                PosiY = CDbl(lblYPosition.Text) + CDbl(CboStep_Pos_IAI.Text)
+            Else
+                PosiZ = CDbl(lblZPosition.Text) + CDbl(CboStep_Pos_IAI.Text)
             End If
 
-            ClsIAI.Position_IAI(axis, n)
-                ClsIAI.CheckIAIStatus()
-                Class_IAI.IAI_Check_Position = False
-            End If
+            ClsIAI.Position_IAI(axis, PosiY, PosiX)
+            ClsIAI.CheckIAIStatus()
+            Class_IAI.IAI_Check_Position = False
+        End If
+
+
+
+
     End Sub
 
     Private Sub Bt_P_MOVE_MouseUp(sender As Object, e As MouseEventArgs) Handles BtX_P_MOVE.MouseUp, BtY_P_MOVE.MouseUp
         If bt_jogorfast.Text = "Jog" Then
-            Dim axis As String = CType(sender, Button).Tag.ToString()
+            Dim axisbt As String = CType(sender, Button).Tag.ToString()
             BtX_P_MOVE.Enabled = False
-            Class_IAI.IAI_Check_Position = True
-            ClsIAI.JogStop_IAI(axis)
+            If axisbt = "X" Then
+
+                axisbt = "001"
+                ClsIAI.JogStop_IAI(axisbt)
+            ElseIf axisbt = "Y" Then
+
+                axisbt = "010"
+                ClsIAI.JogStop_IAI(axisbt)
+            Else
+
+                axisbt = "100"
+                ClsIAI.JogStop_IAI(axisbt)
+            End If
+
             ClsIAI.IAI_Send_Check_Status()
             ClsIAI.CheckIAIStatus()
-            Class_IAI.IAI_Check_Position = False
+
             BtX_P_MOVE.Enabled = True
 
         End If
@@ -198,42 +229,73 @@
 
 
     Private Sub Bt_N_MOVE_MouseDown(sender As Object, e As MouseEventArgs) Handles BtX_N_MOVE.MouseDown, BtY_N_MOVE.MouseDown
-        Dim axis As String = CType(sender, Button).Tag.ToString()
+        Dim axis As String = Class_Var.IAI.Axis
+        Dim axisbt As String = CType(sender, Button).Tag.ToString()
+        Dim PosiX As Double = CDbl(lblXPosition.Text)
+        Dim PosiY As Double = CDbl(lblYPosition.Text)
+        Dim PosiZ As Double = CDbl(lblZPosition.Text)
+
+
         If bt_jogorfast.Text = "Jog" Then
 
-            Dim n As Double
-            If axis = "001" Then
-                n = CDbl(lblXPosition.Text)
-            ElseIf axis = "010" Then
-                n = CDbl(lblYPosition.Text)
+            If axisbt = "X" Then
+                PosiX = CDbl(lblXPosition.Text)
+                axis = "001"
+                ClsIAI.JogRW_IAI(axis, PosiX)
+            ElseIf axisbt = "Y" Then
+                PosiY = CDbl(lblYPosition.Text)
+                axis = "010"
+                ClsIAI.JogRW_IAI(axis, PosiY)
+            Else
+                PosiZ = CDbl(lblZPosition.Text)
+                axis = "100"
+                ClsIAI.JogRW_IAI(axis, PosiZ)
             End If
 
-            ClsIAI.JogRW_IAI(axis, n)
+
+
         Else
             Class_IAI.IAI_Check_Position = True
-            Dim n As Double
-            If axis = "001" Then
-                n = CDbl(lblXPosition.Text) - CDbl(CboStep_Pos_IAI.Text)
-            ElseIf axis = "010" Then
-                n = CDbl(lblYPosition.Text) - CDbl(CboStep_Pos_IAI.Text)
+
+            If axisbt = "X" Then
+                PosiX = CDbl(lblXPosition.Text) - CDbl(CboStep_Pos_IAI.Text)
+            ElseIf axisbt = "Y" Then
+                PosiY = CDbl(lblYPosition.Text) - CDbl(CboStep_Pos_IAI.Text)
+            Else
+                PosiZ = CDbl(lblZPosition.Text) - CDbl(CboStep_Pos_IAI.Text)
             End If
-            ClsIAI.Position_IAI(axis, n)
+
+            ClsIAI.Position_IAI(axis, PosiY, PosiX)
             ClsIAI.CheckIAIStatus()
             Class_IAI.IAI_Check_Position = False
         End If
+
+
     End Sub
 
     Private Sub Bt_N_MOVE_MouseUp(sender As Object, e As MouseEventArgs) Handles BtX_N_MOVE.MouseUp, BtY_N_MOVE.MouseUp
 
 
         If bt_jogorfast.Text = "Jog" Then
-            Dim axis As String = CType(sender, Button).Tag.ToString()
+            Dim axisbt As String = CType(sender, Button).Tag.ToString()
             BtX_N_MOVE.Enabled = False
-            Class_IAI.IAI_Check_Position = True
-            ClsIAI.JogStop_IAI(axis)
+            If axisbt = "X" Then
+
+                axisbt = "001"
+                ClsIAI.JogStop_IAI(axisbt)
+            ElseIf axisbt = "Y" Then
+
+                axisbt = "010"
+                ClsIAI.JogStop_IAI(axisbt)
+            Else
+
+                axisbt = "100"
+                ClsIAI.JogStop_IAI(axisbt)
+            End If
+
             ClsIAI.IAI_Send_Check_Status()
             ClsIAI.CheckIAIStatus()
-            Class_IAI.IAI_Check_Position = False
+
             BtX_N_MOVE.Enabled = True
 
         End If
@@ -245,5 +307,10 @@
         Else
             bt_jogorfast.Text = "Fast"
         End If
+    End Sub
+
+    Private Sub Bt_reset_Click(sender As Object, e As EventArgs) Handles Bt_reset.Click
+        ClsIAI.IAI_ResetError()
+        BtHome_IAI.Enabled = True
     End Sub
 End Class
