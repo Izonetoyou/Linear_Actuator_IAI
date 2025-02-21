@@ -117,14 +117,14 @@ Public Class Class_IAI
             If tmp_check2 = "212" Then
 
                 sArry2 = CheckStatusTotal(tmp_check1).Split("_")
-                If sArry2(0) = "00011100" Then
+                If sArry2(0) = "00011100" Or sArry2(0) = "00001100" Then
                     IAIxStatus = True
                 Else
                     IAIxStatus = False
 
                 End If
 
-                If sArry2(2) = "00011100" Then
+                If sArry2(2) = "00011100" Or sArry2(2) = "00001100" Then
                     IAIyStatus = True
                 Else
                     IAIyStatus = False
@@ -226,18 +226,19 @@ Public Class Class_IAI
 
         '------------------------------------ Check status of IAI
         Dim CountCommand As Integer = 0
+        Delay(100)
         Do
             '----------------
             'If blExit = True Then Exit Sub
             '----------------
-            IAI_Send_Check_Status()
+
 
             If ReadySend = True Then
-
+                IAI_Send_Check_Status()
 
                 Delay(20)
                 CountCommand += 1
-                If CountCommand > 50 Then Return False
+                If CountCommand > 100 Then Return False
 
             End If
 
@@ -247,6 +248,10 @@ Public Class Class_IAI
         Loop Until IAIxStatus = True And IAIyStatus = True 'And IAIzStatus = True
 
         Return True
+
+
+
+
 
     End Function
     Friend Function Position_IAI(axis As String, ByVal PosiY As String, ByVal PosiX As String)
@@ -614,7 +619,7 @@ startt:
 
         Dim axis = EachAxis(zyx)
         Dim scHex As String = CheckSum("!00238" + axis + "00")    'Check sum
-
+        Debug.Print("!00238" + axis + "00" + scHex + vbCr + vbLf)
         Return "!00238" + axis + "00" + scHex + vbCr + vbLf
 
     End Function

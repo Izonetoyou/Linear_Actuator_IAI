@@ -36,8 +36,6 @@ Partial Class Form1
         Me.CboStep_Pos_IAI = New System.Windows.Forms.ComboBox()
         Me.BtY_P_MOVE = New System.Windows.Forms.Button()
         Me.BtY_N_MOVE = New System.Windows.Forms.Button()
-        Me.BtX_N_MOVE = New System.Windows.Forms.Button()
-        Me.BtX_P_MOVE = New System.Windows.Forms.Button()
         Me.lbStatusZ = New System.Windows.Forms.Label()
         Me.lbStatusX = New System.Windows.Forms.Label()
         Me.lbStatusY = New System.Windows.Forms.Label()
@@ -54,6 +52,16 @@ Partial Class Form1
         Me.BtCon_IAI = New System.Windows.Forms.Button()
         Me.bt_jogorfast = New System.Windows.Forms.Button()
         Me.Bt_reset = New System.Windows.Forms.Button()
+        Me.BtX_P_MOVE = New System.Windows.Forms.Button()
+        Me.BtX_N_MOVE = New System.Windows.Forms.Button()
+        Me.BtZ_N_MOVE = New System.Windows.Forms.Button()
+        Me.BtZ_P_MOVE = New System.Windows.Forms.Button()
+        Me.txt_P1_X = New System.Windows.Forms.TextBox()
+        Me.txt_P1_Y = New System.Windows.Forms.TextBox()
+        Me.txt_P2_X = New System.Windows.Forms.TextBox()
+        Me.txt_P2_Y = New System.Windows.Forms.TextBox()
+        Me.bt_P1 = New System.Windows.Forms.Button()
+        Me.bt_P2 = New System.Windows.Forms.Button()
         Me.StatusStrip1.SuspendLayout()
         CType(Me.SpeedTeackbar, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -170,10 +178,10 @@ Partial Class Form1
         'BtY_P_MOVE
         '
         Me.BtY_P_MOVE.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.BtY_P_MOVE.Location = New System.Drawing.Point(413, 176)
+        Me.BtY_P_MOVE.Location = New System.Drawing.Point(388, 176)
         Me.BtY_P_MOVE.Name = "BtY_P_MOVE"
         Me.BtY_P_MOVE.Size = New System.Drawing.Size(110, 37)
-        Me.BtY_P_MOVE.TabIndex = 187
+        Me.BtY_P_MOVE.TabIndex = 6
         Me.BtY_P_MOVE.Tag = "Y"
         Me.BtY_P_MOVE.Text = "Y Jog +"
         Me.BtY_P_MOVE.UseVisualStyleBackColor = False
@@ -181,40 +189,18 @@ Partial Class Form1
         'BtY_N_MOVE
         '
         Me.BtY_N_MOVE.BackColor = System.Drawing.Color.FromArgb(CType(CType(0, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(192, Byte), Integer))
-        Me.BtY_N_MOVE.Location = New System.Drawing.Point(413, 255)
+        Me.BtY_N_MOVE.Location = New System.Drawing.Point(388, 255)
         Me.BtY_N_MOVE.Name = "BtY_N_MOVE"
         Me.BtY_N_MOVE.Size = New System.Drawing.Size(110, 37)
-        Me.BtY_N_MOVE.TabIndex = 186
+        Me.BtY_N_MOVE.TabIndex = 7
         Me.BtY_N_MOVE.Tag = "Y"
         Me.BtY_N_MOVE.Text = "Y Jog -"
         Me.BtY_N_MOVE.UseVisualStyleBackColor = False
         '
-        'BtX_N_MOVE
-        '
-        Me.BtX_N_MOVE.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.BtX_N_MOVE.Location = New System.Drawing.Point(239, 254)
-        Me.BtX_N_MOVE.Name = "BtX_N_MOVE"
-        Me.BtX_N_MOVE.Size = New System.Drawing.Size(110, 38)
-        Me.BtX_N_MOVE.TabIndex = 185
-        Me.BtX_N_MOVE.Tag = "X"
-        Me.BtX_N_MOVE.Text = "X Jog -"
-        Me.BtX_N_MOVE.UseVisualStyleBackColor = False
-        '
-        'BtX_P_MOVE
-        '
-        Me.BtX_P_MOVE.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(192, Byte), Integer), CType(CType(255, Byte), Integer))
-        Me.BtX_P_MOVE.Location = New System.Drawing.Point(239, 175)
-        Me.BtX_P_MOVE.Name = "BtX_P_MOVE"
-        Me.BtX_P_MOVE.Size = New System.Drawing.Size(110, 38)
-        Me.BtX_P_MOVE.TabIndex = 184
-        Me.BtX_P_MOVE.Tag = "X"
-        Me.BtX_P_MOVE.Text = "X Jog +"
-        Me.BtX_P_MOVE.UseVisualStyleBackColor = False
-        '
         'lbStatusZ
         '
         Me.lbStatusZ.AutoSize = True
-        Me.lbStatusZ.Location = New System.Drawing.Point(645, 149)
+        Me.lbStatusZ.Location = New System.Drawing.Point(583, 149)
         Me.lbStatusZ.Name = "lbStatusZ"
         Me.lbStatusZ.Size = New System.Drawing.Size(14, 13)
         Me.lbStatusZ.TabIndex = 206
@@ -232,7 +218,7 @@ Partial Class Form1
         'lbStatusY
         '
         Me.lbStatusY.AutoSize = True
-        Me.lbStatusY.Location = New System.Drawing.Point(457, 149)
+        Me.lbStatusY.Location = New System.Drawing.Point(432, 149)
         Me.lbStatusY.Name = "lbStatusY"
         Me.lbStatusY.Size = New System.Drawing.Size(14, 13)
         Me.lbStatusY.TabIndex = 203
@@ -244,7 +230,7 @@ Partial Class Form1
         Me.BtHome_IAI.Location = New System.Drawing.Point(315, 12)
         Me.BtHome_IAI.Name = "BtHome_IAI"
         Me.BtHome_IAI.Size = New System.Drawing.Size(142, 66)
-        Me.BtHome_IAI.TabIndex = 205
+        Me.BtHome_IAI.TabIndex = 2
         Me.BtHome_IAI.Text = "HOME"
         Me.BtHome_IAI.UseVisualStyleBackColor = False
         '
@@ -254,7 +240,7 @@ Partial Class Form1
         Me.BtEnable_IAI.Location = New System.Drawing.Point(169, 12)
         Me.BtEnable_IAI.Name = "BtEnable_IAI"
         Me.BtEnable_IAI.Size = New System.Drawing.Size(140, 66)
-        Me.BtEnable_IAI.TabIndex = 201
+        Me.BtEnable_IAI.TabIndex = 1
         Me.BtEnable_IAI.Text = "Enable"
         Me.BtEnable_IAI.UseVisualStyleBackColor = True
         '
@@ -317,7 +303,7 @@ Partial Class Form1
         'LbStatusDisplay
         '
         Me.LbStatusDisplay.AutoSize = True
-        Me.LbStatusDisplay.Location = New System.Drawing.Point(25, 398)
+        Me.LbStatusDisplay.Location = New System.Drawing.Point(20, 398)
         Me.LbStatusDisplay.Name = "LbStatusDisplay"
         Me.LbStatusDisplay.Size = New System.Drawing.Size(71, 13)
         Me.LbStatusDisplay.TabIndex = 213
@@ -329,7 +315,7 @@ Partial Class Form1
         Me.BtCon_IAI.Location = New System.Drawing.Point(23, 12)
         Me.BtCon_IAI.Name = "BtCon_IAI"
         Me.BtCon_IAI.Size = New System.Drawing.Size(140, 66)
-        Me.BtCon_IAI.TabIndex = 42
+        Me.BtCon_IAI.TabIndex = 0
         Me.BtCon_IAI.Text = "Connect"
         Me.BtCon_IAI.UseVisualStyleBackColor = True
         '
@@ -349,15 +335,120 @@ Partial Class Form1
         Me.Bt_reset.Location = New System.Drawing.Point(475, 12)
         Me.Bt_reset.Name = "Bt_reset"
         Me.Bt_reset.Size = New System.Drawing.Size(142, 66)
-        Me.Bt_reset.TabIndex = 215
+        Me.Bt_reset.TabIndex = 3
         Me.Bt_reset.Text = "Reset"
         Me.Bt_reset.UseVisualStyleBackColor = False
+        '
+        'BtX_P_MOVE
+        '
+        Me.BtX_P_MOVE.Location = New System.Drawing.Point(253, 177)
+        Me.BtX_P_MOVE.Name = "BtX_P_MOVE"
+        Me.BtX_P_MOVE.Size = New System.Drawing.Size(105, 36)
+        Me.BtX_P_MOVE.TabIndex = 4
+        Me.BtX_P_MOVE.TabStop = False
+        Me.BtX_P_MOVE.Tag = "X"
+        Me.BtX_P_MOVE.Text = "X Jog +"
+        Me.BtX_P_MOVE.UseVisualStyleBackColor = True
+        '
+        'BtX_N_MOVE
+        '
+        Me.BtX_N_MOVE.Location = New System.Drawing.Point(253, 256)
+        Me.BtX_N_MOVE.Name = "BtX_N_MOVE"
+        Me.BtX_N_MOVE.Size = New System.Drawing.Size(105, 36)
+        Me.BtX_N_MOVE.TabIndex = 5
+        Me.BtX_N_MOVE.Tag = "X"
+        Me.BtX_N_MOVE.Text = "X Jog -"
+        Me.BtX_N_MOVE.UseVisualStyleBackColor = True
+        '
+        'BtZ_N_MOVE
+        '
+        Me.BtZ_N_MOVE.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
+        Me.BtZ_N_MOVE.Location = New System.Drawing.Point(538, 255)
+        Me.BtZ_N_MOVE.Name = "BtZ_N_MOVE"
+        Me.BtZ_N_MOVE.Size = New System.Drawing.Size(110, 37)
+        Me.BtZ_N_MOVE.TabIndex = 216
+        Me.BtZ_N_MOVE.Tag = "Z"
+        Me.BtZ_N_MOVE.Text = "Z Jog -"
+        Me.BtZ_N_MOVE.UseVisualStyleBackColor = False
+        '
+        'BtZ_P_MOVE
+        '
+        Me.BtZ_P_MOVE.BackColor = System.Drawing.Color.FromArgb(CType(CType(255, Byte), Integer), CType(CType(128, Byte), Integer), CType(CType(128, Byte), Integer))
+        Me.BtZ_P_MOVE.Location = New System.Drawing.Point(538, 176)
+        Me.BtZ_P_MOVE.Name = "BtZ_P_MOVE"
+        Me.BtZ_P_MOVE.Size = New System.Drawing.Size(110, 37)
+        Me.BtZ_P_MOVE.TabIndex = 215
+        Me.BtZ_P_MOVE.Tag = "Z"
+        Me.BtZ_P_MOVE.Text = "Z Jog +"
+        Me.BtZ_P_MOVE.UseVisualStyleBackColor = False
+        '
+        'txt_P1_X
+        '
+        Me.txt_P1_X.Location = New System.Drawing.Point(267, 334)
+        Me.txt_P1_X.Name = "txt_P1_X"
+        Me.txt_P1_X.Size = New System.Drawing.Size(82, 20)
+        Me.txt_P1_X.TabIndex = 217
+        Me.txt_P1_X.Text = "100"
+        '
+        'txt_P1_Y
+        '
+        Me.txt_P1_Y.Location = New System.Drawing.Point(401, 334)
+        Me.txt_P1_Y.Name = "txt_P1_Y"
+        Me.txt_P1_Y.Size = New System.Drawing.Size(82, 20)
+        Me.txt_P1_Y.TabIndex = 218
+        Me.txt_P1_Y.Text = "19"
+        '
+        'txt_P2_X
+        '
+        Me.txt_P2_X.Location = New System.Drawing.Point(267, 360)
+        Me.txt_P2_X.Name = "txt_P2_X"
+        Me.txt_P2_X.Size = New System.Drawing.Size(82, 20)
+        Me.txt_P2_X.TabIndex = 219
+        Me.txt_P2_X.Text = "350"
+        '
+        'txt_P2_Y
+        '
+        Me.txt_P2_Y.Location = New System.Drawing.Point(401, 360)
+        Me.txt_P2_Y.Name = "txt_P2_Y"
+        Me.txt_P2_Y.Size = New System.Drawing.Size(82, 20)
+        Me.txt_P2_Y.TabIndex = 220
+        Me.txt_P2_Y.Text = "5"
+        '
+        'bt_P1
+        '
+        Me.bt_P1.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(222, Byte))
+        Me.bt_P1.Location = New System.Drawing.Point(162, 329)
+        Me.bt_P1.Name = "bt_P1"
+        Me.bt_P1.Size = New System.Drawing.Size(99, 25)
+        Me.bt_P1.TabIndex = 221
+        Me.bt_P1.Text = "P1"
+        Me.bt_P1.UseVisualStyleBackColor = True
+        '
+        'bt_P2
+        '
+        Me.bt_P2.Font = New System.Drawing.Font("Microsoft Sans Serif", 9.75!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(222, Byte))
+        Me.bt_P2.Location = New System.Drawing.Point(163, 360)
+        Me.bt_P2.Name = "bt_P2"
+        Me.bt_P2.Size = New System.Drawing.Size(99, 25)
+        Me.bt_P2.TabIndex = 222
+        Me.bt_P2.Text = "P2"
+        Me.bt_P2.UseVisualStyleBackColor = True
         '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(696, 567)
+        Me.Controls.Add(Me.bt_P2)
+        Me.Controls.Add(Me.bt_P1)
+        Me.Controls.Add(Me.txt_P2_Y)
+        Me.Controls.Add(Me.txt_P2_X)
+        Me.Controls.Add(Me.txt_P1_Y)
+        Me.Controls.Add(Me.txt_P1_X)
+        Me.Controls.Add(Me.BtZ_N_MOVE)
+        Me.Controls.Add(Me.BtZ_P_MOVE)
+        Me.Controls.Add(Me.BtX_N_MOVE)
+        Me.Controls.Add(Me.BtX_P_MOVE)
         Me.Controls.Add(Me.Bt_reset)
         Me.Controls.Add(Me.BtCon_IAI)
         Me.Controls.Add(Me.bt_jogorfast)
@@ -373,9 +464,7 @@ Partial Class Form1
         Me.Controls.Add(Me.lbStatusY)
         Me.Controls.Add(Me.BtHome_IAI)
         Me.Controls.Add(Me.ChkShoPosi)
-        Me.Controls.Add(Me.BtX_P_MOVE)
         Me.Controls.Add(Me.Label11)
-        Me.Controls.Add(Me.BtX_N_MOVE)
         Me.Controls.Add(Me.BtY_N_MOVE)
         Me.Controls.Add(Me.Speedtextbox)
         Me.Controls.Add(Me.BtY_P_MOVE)
@@ -388,6 +477,7 @@ Partial Class Form1
         Me.Controls.Add(Me.Label52)
         Me.Controls.Add(Me.Label53)
         Me.Name = "Form1"
+        Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
         Me.Text = "Form1"
         Me.StatusStrip1.ResumeLayout(False)
         Me.StatusStrip1.PerformLayout()
@@ -409,8 +499,6 @@ Partial Class Form1
     Friend WithEvents CboStep_Pos_IAI As ComboBox
     Friend WithEvents BtY_P_MOVE As Button
     Friend WithEvents BtY_N_MOVE As Button
-    Friend WithEvents BtX_N_MOVE As Button
-    Friend WithEvents BtX_P_MOVE As Button
     Friend WithEvents lbStatusZ As Label
     Friend WithEvents lbStatusX As Label
     Friend WithEvents lbStatusY As Label
@@ -427,4 +515,14 @@ Partial Class Form1
     Friend WithEvents BtCon_IAI As Button
     Friend WithEvents bt_jogorfast As Button
     Friend WithEvents Bt_reset As Button
+    Friend WithEvents BtX_P_MOVE As Button
+    Friend WithEvents BtX_N_MOVE As Button
+    Friend WithEvents BtZ_N_MOVE As Button
+    Friend WithEvents BtZ_P_MOVE As Button
+    Friend WithEvents txt_P1_X As TextBox
+    Friend WithEvents txt_P1_Y As TextBox
+    Friend WithEvents txt_P2_X As TextBox
+    Friend WithEvents txt_P2_Y As TextBox
+    Friend WithEvents bt_P1 As Button
+    Friend WithEvents bt_P2 As Button
 End Class

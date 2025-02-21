@@ -88,21 +88,33 @@
 
     End Sub
     Private Sub BtHome_IAI_Click(sender As Object, e As EventArgs) Handles BtHome_IAI.Click
-        BtHome_IAI.Enabled = False
+        Try
+            ' Disable the button to prevent multiple clicks
+            BtHome_IAI.Enabled = False
 
+            ' Display status message: Homing in progress
+            Show_Label_Display("IAI", "Homing IAI, IAI กำลังกลับไปจุดเริ่มต้น", "Waiting IAI", Color.Orange)
 
-        ClsIAI.IAI_HOME()
-        ClsIAI.Check_Status_Home_IAI()
+            ' Execute homing operation
+            ClsIAI.IAI_HOME()
+            ClsIAI.Check_Status_Home_IAI()
 
+            ' Check homing status
+            If ClsIAI.CheckIAIStatus() Then
+                Show_Label_Display("IAI", "Home IAI Success, IAI กลับไปจุดเริ่มต้นสำเร็จ", "Ready IAI", Color.Green)
+            Else
+                Show_Label_Display("IAI", "Home IAI Error, IAI กลับไปจุดเริ่มต้นไม่ได้", "Check IAI", Color.Red)
+            End If
 
-        If ClsIAI.CheckIAIStatus() = False Then
-
-            Show_Label_Display("IAI", "Home IAI Error ,IAI กลับไปจุดเริ่มต้นไม่ได้", "Check IAI", Color.Red)
-
-        End If
-
-        BtHome_IAI.Enabled = True
+        Catch ex As Exception
+            ' Handle any unexpected errors
+            Show_Label_Display("IAI", $"Error: {ex.Message}", "Error IAI", Color.Red)
+        Finally
+            ' Ensure button is re-enabled even if an error occurs
+            BtHome_IAI.Enabled = True
+        End Try
     End Sub
+
 
     Private Sub TimerIAI_Tick(sender As Object, e As EventArgs) Handles TimerIAI.Tick
 
@@ -122,12 +134,18 @@
         Else
             lbStatusY.Text = "Y = Busy !"
         End If
+        If Class_IAI.IAIzStatus = True Then
+            lbStatusZ.Text = "Y = Ready"
+
+        Else
+            lbStatusZ.Text = "Y = Busy !"
+        End If
         Class_IAI.IAI_Check_Position = ChkShoPosi.Checked
         If Class_IAI.IAI_Check_Position = True Or ChkShoPosi.Checked = True Then  'Class_IAI.IAI_Check_Position = True Or
 
             lblXPosition.Text = Class_IAI.IAIxPosition
             lblYPosition.Text = Class_IAI.IAIyPosition
-
+            lblZPosition.Text = Class_IAI.IAIzPosition
         End If
         Speedtextbox.Text = SpeedTeackbar.Value
         If Class_IAI.IAI_Enable_Dis = True Then
@@ -154,152 +172,140 @@
     End Sub
 
 
-    Private Sub Bt_P_MOVE_MouseDown(sender As Object, e As MouseEventArgs) Handles BtX_P_MOVE.MouseDown, BtY_P_MOVE.MouseDown
-        Dim axis As String = Class_Var.IAI.Axis
-        Dim axisbt As String = CType(sender, Button).Tag.ToString()
-        Dim PosiX As Double = CDbl(lblXPosition.Text)
-        Dim PosiY As Double = CDbl(lblYPosition.Text)
-        Dim PosiZ As Double = CDbl(lblZPosition.Text)
-
-
-        If bt_jogorfast.Text = "Jog" Then
-
-            If axisbt = "X" Then
-                PosiX = CDbl(lblXPosition.Text)
-                axis = "001"
-                ClsIAI.JogFW_IAI(axis, PosiX)
-            ElseIf axisbt = "Y" Then
-                PosiY = CDbl(lblYPosition.Text)
-                axis = "010"
-                ClsIAI.JogFW_IAI(axis, PosiY)
-            Else
-                PosiZ = CDbl(lblZPosition.Text)
-                axis = "100"
-                ClsIAI.JogFW_IAI(axis, PosiZ)
-            End If
-
-
-
-        Else
-            Class_IAI.IAI_Check_Position = True
-
-            If axisbt = "X" Then
-                PosiX = CDbl(lblXPosition.Text) + CDbl(CboStep_Pos_IAI.Text)
-            ElseIf axisbt = "Y" Then
-                PosiY = CDbl(lblYPosition.Text) + CDbl(CboStep_Pos_IAI.Text)
-            Else
-                PosiZ = CDbl(lblZPosition.Text) + CDbl(CboStep_Pos_IAI.Text)
-            End If
-
-            ClsIAI.Position_IAI(axis, PosiY, PosiX)
-            ClsIAI.CheckIAIStatus()
-            Class_IAI.IAI_Check_Position = False
-        End If
-
-
-
-
-    End Sub
-
-    Private Sub Bt_P_MOVE_MouseUp(sender As Object, e As MouseEventArgs) Handles BtX_P_MOVE.MouseUp, BtY_P_MOVE.MouseUp
-        If bt_jogorfast.Text = "Jog" Then
+    Private Sub Bt_P_MOVE_MouseDown(sender As Object, e As MouseEventArgs) Handles BtX_P_MOVE.MouseDown, BtY_P_MOVE.MouseDown, BtZ_P_MOVE.MouseDown
+        Try
+            Dim axis As String = Class_Var.IAI.Axis
             Dim axisbt As String = CType(sender, Button).Tag.ToString()
-            BtX_P_MOVE.Enabled = False
-            If axisbt = "X" Then
+            Dim PosiX As Double = CDbl(lblXPosition.Text)
+            Dim PosiY As Double = CDbl(lblYPosition.Text)
+            Dim PosiZ As Double = CDbl(lblZPosition.Text)
+            Class_IAI.IAI_Check_Position = True
 
-                axisbt = "001"
-                ClsIAI.JogStop_IAI(axisbt)
-            ElseIf axisbt = "Y" Then
-
-                axisbt = "010"
-                ClsIAI.JogStop_IAI(axisbt)
+            If bt_jogorfast.Text = "Jog" Then
+                Select Case axisbt
+                    Case "X"
+                        axis = "001"
+                        ClsIAI.JogFW_IAI(axis, PosiX)
+                    Case "Y"
+                        axis = "010"
+                        ClsIAI.JogFW_IAI(axis, PosiY)
+                    Case "Z"
+                        axis = "100"
+                        ClsIAI.JogFW_IAI(axis, PosiZ)
+                End Select
             Else
+                Select Case axisbt
+                    Case "X"
+                        PosiX += CDbl(CboStep_Pos_IAI.Text)
+                    Case "Y"
+                        PosiY += CDbl(CboStep_Pos_IAI.Text)
+                    Case "Z"
+                        PosiZ += CDbl(CboStep_Pos_IAI.Text)
+                End Select
 
-                axisbt = "100"
-                ClsIAI.JogStop_IAI(axisbt)
+                ClsIAI.Position_IAI(axis, PosiY, PosiX)
+                ClsIAI.CheckIAIStatus()
             End If
 
-            ClsIAI.IAI_Send_Check_Status()
-            ClsIAI.CheckIAIStatus()
+            Class_IAI.IAI_Check_Position = False
 
-            BtX_P_MOVE.Enabled = True
-
-        End If
+        Catch ex As Exception
+            MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 
 
-    Private Sub Bt_N_MOVE_MouseDown(sender As Object, e As MouseEventArgs) Handles BtX_N_MOVE.MouseDown, BtY_N_MOVE.MouseDown
-        Dim axis As String = Class_Var.IAI.Axis
-        Dim axisbt As String = CType(sender, Button).Tag.ToString()
-        Dim PosiX As Double = CDbl(lblXPosition.Text)
-        Dim PosiY As Double = CDbl(lblYPosition.Text)
-        Dim PosiZ As Double = CDbl(lblZPosition.Text)
+    Private Sub Bt_P_MOVE_MouseUp(sender As Object, e As MouseEventArgs) Handles BtX_P_MOVE.MouseUp, BtY_P_MOVE.MouseUp, BtZ_P_MOVE.MouseUp
+        Try
+            Dim axisbt As String = CType(sender, Button).Tag.ToString()
 
+            If bt_jogorfast.Text = "Jog" Then
+                If axisbt = "X" Then
+                    BtX_P_MOVE.Enabled = False
+                Else
+                    BtY_P_MOVE.Enabled = False
+                End If
 
-        If bt_jogorfast.Text = "Jog" Then
+                ClsIAI.JogStop_IAI(Class_Var.IAI.Axis)
+                ClsIAI.IAI_Send_Check_Status()
+                ClsIAI.CheckIAIStatus()
 
-            If axisbt = "X" Then
-                PosiX = CDbl(lblXPosition.Text)
-                axis = "001"
-                ClsIAI.JogRW_IAI(axis, PosiX)
-            ElseIf axisbt = "Y" Then
-                PosiY = CDbl(lblYPosition.Text)
-                axis = "010"
-                ClsIAI.JogRW_IAI(axis, PosiY)
-            Else
-                PosiZ = CDbl(lblZPosition.Text)
-                axis = "100"
-                ClsIAI.JogRW_IAI(axis, PosiZ)
+                BtX_P_MOVE.Enabled = True
+                BtY_P_MOVE.Enabled = True
             End If
 
+        Catch ex As Exception
+            MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
 
+    Private Sub Bt_N_MOVE_MouseDown(sender As Object, e As MouseEventArgs) Handles BtX_N_MOVE.MouseDown, BtY_N_MOVE.MouseDown, BtZ_N_MOVE.MouseDown
+        Try
+            Dim axis As String = Class_Var.IAI.Axis
+            Dim axisbt As String = CType(sender, Button).Tag.ToString()
+            Dim PosiX As Double = CDbl(lblXPosition.Text)
+            Dim PosiY As Double = CDbl(lblYPosition.Text)
+            Dim PosiZ As Double = CDbl(lblZPosition.Text)
 
-        Else
             Class_IAI.IAI_Check_Position = True
 
-            If axisbt = "X" Then
-                PosiX = CDbl(lblXPosition.Text) - CDbl(CboStep_Pos_IAI.Text)
-            ElseIf axisbt = "Y" Then
-                PosiY = CDbl(lblYPosition.Text) - CDbl(CboStep_Pos_IAI.Text)
+            If bt_jogorfast.Text = "Jog" Then
+                Select Case axisbt
+                    Case "X"
+                        axis = "001"
+                        ClsIAI.JogRW_IAI(axis, PosiX)
+                    Case "Y"
+                        axis = "010"
+                        ClsIAI.JogRW_IAI(axis, PosiY)
+                    Case "Z"
+                        axis = "100"
+                        ClsIAI.JogRW_IAI(axis, PosiZ)
+                End Select
             Else
-                PosiZ = CDbl(lblZPosition.Text) - CDbl(CboStep_Pos_IAI.Text)
+                Select Case axisbt
+                    Case "X"
+                        PosiX -= CDbl(CboStep_Pos_IAI.Text)
+                    Case "Y"
+                        PosiY -= CDbl(CboStep_Pos_IAI.Text)
+                    Case "Z"
+                        PosiZ -= CDbl(CboStep_Pos_IAI.Text)
+                End Select
+
+                ClsIAI.Position_IAI(axis, PosiY, PosiX)
+                ClsIAI.CheckIAIStatus()
             End If
 
-            ClsIAI.Position_IAI(axis, PosiY, PosiX)
-            ClsIAI.CheckIAIStatus()
             Class_IAI.IAI_Check_Position = False
-        End If
 
-
+        Catch ex As Exception
+            MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
 
     Private Sub Bt_N_MOVE_MouseUp(sender As Object, e As MouseEventArgs) Handles BtX_N_MOVE.MouseUp, BtY_N_MOVE.MouseUp
-
-
-        If bt_jogorfast.Text = "Jog" Then
+        Try
             Dim axisbt As String = CType(sender, Button).Tag.ToString()
-            BtX_N_MOVE.Enabled = False
-            If axisbt = "X" Then
 
-                axisbt = "001"
-                ClsIAI.JogStop_IAI(axisbt)
-            ElseIf axisbt = "Y" Then
+            If bt_jogorfast.Text = "Jog" Then
+                If axisbt = "X" Then
+                    BtX_N_MOVE.Enabled = False
+                Else
+                    BtY_N_MOVE.Enabled = False
+                End If
 
-                axisbt = "010"
-                ClsIAI.JogStop_IAI(axisbt)
-            Else
+                ClsIAI.JogStop_IAI(Class_Var.IAI.Axis)
+                ClsIAI.IAI_Send_Check_Status()
+                ClsIAI.CheckIAIStatus()
 
-                axisbt = "100"
-                ClsIAI.JogStop_IAI(axisbt)
+                BtX_N_MOVE.Enabled = True
+                BtY_N_MOVE.Enabled = True
             End If
 
-            ClsIAI.IAI_Send_Check_Status()
-            ClsIAI.CheckIAIStatus()
-
-            BtX_N_MOVE.Enabled = True
-
-        End If
+        Catch ex As Exception
+            MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
     End Sub
+
 
     Private Sub bt_jogorfast_Click(sender As Object, e As EventArgs) Handles bt_jogorfast.Click
         If bt_jogorfast.Text = "Fast" Then
@@ -310,7 +316,57 @@
     End Sub
 
     Private Sub Bt_reset_Click(sender As Object, e As EventArgs) Handles Bt_reset.Click
-        ClsIAI.IAI_ResetError()
-        BtHome_IAI.Enabled = True
+        Try
+            Bt_reset.Enabled = False ' Disable button during reset
+            ClsIAI.IAI_ResetError()
+
+            ' Optional: Provide feedback to the user
+            Show_Label_Display("IAI", "Resetting IAI errors...", "Reset", Color.Orange)
+
+            ' Re-enable home button after reset
+            BtHome_IAI.Enabled = True
+            Delay(15000)
+            ' Optional: Confirm reset success
+            Show_Label_Display("IAI", "IAI errors reset successfully.", "Ready", Color.Green)
+            Class_IAI.IAI_Enable_Dis = False
+        Catch ex As Exception
+            MessageBox.Show($"Error resetting IAI: {ex.Message}", "Reset Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        Finally
+            Bt_reset.Enabled = True ' Re-enable button in any case
+        End Try
     End Sub
+
+    Private Sub bt_P1_Click(sender As Object, e As EventArgs) Handles bt_P1.Click
+        Try
+            Dim axis As String = Class_Var.IAI.Axis
+
+
+            Class_IAI.IAI_Check_Position = True
+
+            ClsIAI.Position_IAI(axis, txt_P1_Y.Text, txt_P1_X.Text)
+            ClsIAI.CheckIAIStatus()
+
+            Class_IAI.IAI_Check_Position = False
+
+        Catch ex As Exception
+            MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+    Private Sub bt_P2_Click(sender As Object, e As EventArgs) Handles bt_P2.Click
+        Try
+            Dim axis As String = Class_Var.IAI.Axis
+
+
+            Class_IAI.IAI_Check_Position = True
+
+            ClsIAI.Position_IAI(axis, txt_P2_Y.Text, txt_P2_X.Text)
+            ClsIAI.CheckIAIStatus()
+
+            Class_IAI.IAI_Check_Position = False
+
+        Catch ex As Exception
+            MessageBox.Show($"Error: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error)
+        End Try
+    End Sub
+
 End Class
