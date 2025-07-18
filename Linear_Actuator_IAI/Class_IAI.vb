@@ -278,6 +278,7 @@ startt:
         Try
 
             IAI_SendCommandCheck = ""
+            Form1.LbStatusDisplay.Text = ""
             If Val(PosiX) >= 500 Or Val(PosiX) < -1 Then
                 Form1.LbStatusDisplay.Text = "X Position Over Limit"
                 Exit Function
@@ -292,8 +293,8 @@ startt:
 
             If MPortIAI.IsOpen Then
 
-                IAI_SendCommandCheck = Mid(Trim(XYZMove(axis, 0, Val(PosiY.Trim), Val(PosiX.Trim), Form1.Speedtextbox.Text, 0.5)), 4, 3)
-                MPortIAI.Write(XYZMove(axis, 0, Val(PosiY.Trim), Val(PosiX.Trim), Form1.Speedtextbox.Text, 0.5))
+                IAI_SendCommandCheck = Mid(Trim(XYZMove(axis, Val(PosiZ.Trim), Val(PosiY.Trim), Val(PosiX.Trim), Form1.Speedtextbox.Text, 0.5)), 4, 3)
+                MPortIAI.Write(XYZMove(axis, Val(PosiZ.Trim), Val(PosiY.Trim), Val(PosiX.Trim), Form1.Speedtextbox.Text, 0.5))
 
 
                 Delay(20)
@@ -301,8 +302,8 @@ startt:
 
                 Try
                     MPortIAI.Open()
-                    IAI_SendCommandCheck = Mid(Trim(XYZMove(axis, 0, Val(PosiY.Trim), Val(PosiX.Trim), Form1.Speedtextbox.Text, 0.5)), 4, 3)
-                    MPortIAI.Write(XYZMove(axis, 0, Val(PosiY.Trim), Val(PosiX.Trim), Form1.Speedtextbox.Text, 0.5))
+                    IAI_SendCommandCheck = Mid(Trim(XYZMove(axis, Val(PosiZ.Trim), Val(PosiY.Trim), Val(PosiX.Trim), Form1.Speedtextbox.Text, 0.5)), 4, 3)
+                    MPortIAI.Write(XYZMove(axis, Val(PosiZ.Trim), Val(PosiY.Trim), Val(PosiX.Trim), Form1.Speedtextbox.Text, 0.5))
 
                     Delay(20)
                 Catch ex As Exception
@@ -765,6 +766,7 @@ startt:
 
     End Function
     Function IAI_Reset_Error()
+
 
         Dim scHex As String = CheckSum("!0025B") ' Compute checksum
         Return "!0025B" + scHex + vbCr + vbLf
