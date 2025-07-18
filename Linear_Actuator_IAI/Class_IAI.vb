@@ -129,18 +129,26 @@ Public Class Class_IAI
                 Else
                     IAIyStatus = False
                 End If
+                If sArry2(4) = "00011100" Or sArry2(4) = "00001100" Then
+                    IAIzStatus = True
+                Else
+                    IAIzStatus = False
+                End If
 
             End If
 
             If IAI_Check_Position = True Then
                 Dim Position() As String = Split(CheckStatusTotal(s1), "_")
-                If Position.Length = 4 Then
+                If Position.Length >= 4 Then
 
                     IAIxPosition = Position(1)
-                    IAIxPosition = Math.Round(Val(IAIxPosition), 8)
+                    IAIxPosition = Math.Round(Val(IAIxPosition), 3)
 
                     IAIyPosition = Position(3)
                     IAIyPosition = Math.Round(Val(IAIyPosition), 3)
+
+                    IAIzPosition = Position(5)
+                    IAIzPosition = Math.Round(Val(IAIzPosition), 3)
 
                 End If
             End If
@@ -254,7 +262,7 @@ Public Class Class_IAI
 
 
     End Function
-    Friend Function Position_IAI(axis As String, ByVal PosiY As String, ByVal PosiX As String)
+    Friend Function Position_IAI(axis As String, ByVal PosiY As String, ByVal PosiX As String, ByVal PosiZ As String)
 
         Dim ReSendCmd As Integer = 0
 
@@ -273,35 +281,38 @@ startt:
             If Val(PosiX) >= 500 Or Val(PosiX) < -1 Then
                 Form1.LbStatusDisplay.Text = "X Position Over Limit"
                 Exit Function
-            ElseIf Val(PosiY) >= 22 Or Val(PosiY) < -1 Then
+            ElseIf Val(PosiY) >= 600 Or Val(PosiY) < -1 Then
                 Form1.LbStatusDisplay.Text = "Y Position Over Limit"
+                Exit Function
+            ElseIf Val(PosiZ) >= 50 Or Val(PosiZ) < -1 Then
+                Form1.LbStatusDisplay.Text = "Z Position Over Limit"
                 Exit Function
             End If
 
 
             If MPortIAI.IsOpen Then
 
+                IAI_SendCommandCheck = Mid(Trim(XYZMove(axis, 0, Val(PosiY.Trim), Val(PosiX.Trim), Form1.Speedtextbox.Text, 0.5)), 4, 3)
+                MPortIAI.Write(XYZMove(axis, 0, Val(PosiY.Trim), Val(PosiX.Trim), Form1.Speedtextbox.Text, 0.5))
+
+
+                Delay(20)
+            Else
+
+                Try
+                    MPortIAI.Open()
                     IAI_SendCommandCheck = Mid(Trim(XYZMove(axis, 0, Val(PosiY.Trim), Val(PosiX.Trim), Form1.Speedtextbox.Text, 0.5)), 4, 3)
                     MPortIAI.Write(XYZMove(axis, 0, Val(PosiY.Trim), Val(PosiX.Trim), Form1.Speedtextbox.Text, 0.5))
 
-
                     Delay(20)
-                Else
+                Catch ex As Exception
 
-                    Try
-                        MPortIAI.Open()
-                        IAI_SendCommandCheck = Mid(Trim(XYZMove(axis, 0, Val(PosiY.Trim), Val(PosiX.Trim), Form1.Speedtextbox.Text, 0.5)), 4, 3)
-                        MPortIAI.Write(XYZMove(axis, 0, Val(PosiY.Trim), Val(PosiX.Trim), Form1.Speedtextbox.Text, 0.5))
+                    MessageBox.Show(ex.ToString)
+                    Application.Exit()
 
-                        Delay(20)
-                    Catch ex As Exception
+                End Try
 
-                        MessageBox.Show(ex.ToString)
-                        Application.Exit()
-
-                    End Try
-
-                End If
+            End If
 
 
         Catch ex As Exception
@@ -736,9 +747,9 @@ startt:
 
         ElseIf axisAll = "07" Then  'zyx
 
-            Dim xx As String = tempS.Substring(16, 2)
-            Dim yy As String = tempS.Substring(32, 2)
-            Dim zz As String = tempS.Substring(40, 2)
+            'Dim xx As String = tempS.Substring(16, 2)
+            'Dim yy As String = tempS.Substring(32, 2)
+            'Dim zz As String = tempS.Substring(40, 2)
 
             axisXstatus = ConvertHextoBi(tempS.Substring(8, 2))
             axisYstatus = ConvertHextoBi(tempS.Substring(24, 2))

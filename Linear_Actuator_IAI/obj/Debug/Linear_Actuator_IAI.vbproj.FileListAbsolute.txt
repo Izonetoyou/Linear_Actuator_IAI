@@ -10,3 +10,15 @@ D:\NitikornT\Linear_Actuator_IAI\Linear_Actuator_IAI\Linear_Actuator_IAI\bin\Deb
 D:\NitikornT\Linear_Actuator_IAI\Linear_Actuator_IAI\Linear_Actuator_IAI\obj\Debug\Linear_Actuator_IAI.exe
 D:\NitikornT\Linear_Actuator_IAI\Linear_Actuator_IAI\Linear_Actuator_IAI\obj\Debug\Linear_Actuator_IAI.xml
 D:\NitikornT\Linear_Actuator_IAI\Linear_Actuator_IAI\Linear_Actuator_IAI\obj\Debug\Linear_Actuator_IAI.pdb
+D:\Souce Code\Linear_Actuator_IAI\Linear_Actuator_IAI\bin\Debug\Linear_Actuator_IAI.exe.config
+D:\Souce Code\Linear_Actuator_IAI\Linear_Actuator_IAI\bin\Debug\Linear_Actuator_IAI.exe
+D:\Souce Code\Linear_Actuator_IAI\Linear_Actuator_IAI\bin\Debug\Linear_Actuator_IAI.pdb
+D:\Souce Code\Linear_Actuator_IAI\Linear_Actuator_IAI\bin\Debug\Linear_Actuator_IAI.xml
+D:\Souce Code\Linear_Actuator_IAI\Linear_Actuator_IAI\obj\Debug\Linear_Actuator_IAI.vbproj.AssemblyReference.cache
+D:\Souce Code\Linear_Actuator_IAI\Linear_Actuator_IAI\obj\Debug\Linear_Actuator_IAI.Form1.resources
+D:\Souce Code\Linear_Actuator_IAI\Linear_Actuator_IAI\obj\Debug\Linear_Actuator_IAI.Resources.resources
+D:\Souce Code\Linear_Actuator_IAI\Linear_Actuator_IAI\obj\Debug\Linear_Actuator_IAI.vbproj.GenerateResource.cache
+D:\Souce Code\Linear_Actuator_IAI\Linear_Actuator_IAI\obj\Debug\Linear_Actuator_IAI.vbproj.CoreCompileInputs.cache
+D:\Souce Code\Linear_Actuator_IAI\Linear_Actuator_IAI\obj\Debug\Linear_Actuator_IAI.exe
+D:\Souce Code\Linear_Actuator_IAI\Linear_Actuator_IAI\obj\Debug\Linear_Actuator_IAI.xml
+D:\Souce Code\Linear_Actuator_IAI\Linear_Actuator_IAI\obj\Debug\Linear_Actuator_IAI.pdb

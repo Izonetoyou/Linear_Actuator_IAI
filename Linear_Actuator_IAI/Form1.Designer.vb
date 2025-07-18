@@ -62,6 +62,8 @@ Partial Class Form1
         Me.txt_P2_Y = New System.Windows.Forms.TextBox()
         Me.bt_P1 = New System.Windows.Forms.Button()
         Me.bt_P2 = New System.Windows.Forms.Button()
+        Me.txt_P2_Z = New System.Windows.Forms.TextBox()
+        Me.txt_P1_Z = New System.Windows.Forms.TextBox()
         Me.StatusStrip1.SuspendLayout()
         CType(Me.SpeedTeackbar, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
@@ -434,11 +436,29 @@ Partial Class Form1
         Me.bt_P2.Text = "P2"
         Me.bt_P2.UseVisualStyleBackColor = True
         '
+        'txt_P2_Z
+        '
+        Me.txt_P2_Z.Location = New System.Drawing.Point(535, 355)
+        Me.txt_P2_Z.Name = "txt_P2_Z"
+        Me.txt_P2_Z.Size = New System.Drawing.Size(82, 20)
+        Me.txt_P2_Z.TabIndex = 224
+        Me.txt_P2_Z.Text = "5"
+        '
+        'txt_P1_Z
+        '
+        Me.txt_P1_Z.Location = New System.Drawing.Point(535, 329)
+        Me.txt_P1_Z.Name = "txt_P1_Z"
+        Me.txt_P1_Z.Size = New System.Drawing.Size(82, 20)
+        Me.txt_P1_Z.TabIndex = 223
+        Me.txt_P1_Z.Text = "19"
+        '
         'Form1
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(696, 567)
+        Me.Controls.Add(Me.txt_P2_Z)
+        Me.Controls.Add(Me.txt_P1_Z)
         Me.Controls.Add(Me.bt_P2)
         Me.Controls.Add(Me.bt_P1)
         Me.Controls.Add(Me.txt_P2_Y)
@@ -525,4 +545,6 @@ Partial Class Form1
     Friend WithEvents txt_P2_Y As TextBox
     Friend WithEvents bt_P1 As Button
     Friend WithEvents bt_P2 As Button
+    Friend WithEvents txt_P2_Z As TextBox
+    Friend WithEvents txt_P1_Z As TextBox
 End Class

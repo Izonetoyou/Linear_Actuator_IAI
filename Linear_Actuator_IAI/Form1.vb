@@ -203,7 +203,7 @@
                         PosiZ += CDbl(CboStep_Pos_IAI.Text)
                 End Select
 
-                ClsIAI.Position_IAI(axis, PosiY, PosiX)
+                ClsIAI.Position_IAI(axis, PosiY, PosiX, PosiZ)
                 ClsIAI.CheckIAIStatus()
             End If
 
@@ -271,7 +271,7 @@
                         PosiZ -= CDbl(CboStep_Pos_IAI.Text)
                 End Select
 
-                ClsIAI.Position_IAI(axis, PosiY, PosiX)
+                ClsIAI.Position_IAI(axis, PosiY, PosiX, PosiZ)
                 ClsIAI.CheckIAIStatus()
             End If
 
@@ -343,7 +343,7 @@
 
             Class_IAI.IAI_Check_Position = True
 
-            ClsIAI.Position_IAI(axis, txt_P1_Y.Text, txt_P1_X.Text)
+            ClsIAI.Position_IAI(axis, txt_P1_Y.Text, txt_P1_X.Text, txt_P1_Z.Text)
             ClsIAI.CheckIAIStatus()
 
             Class_IAI.IAI_Check_Position = False
@@ -359,7 +359,7 @@
 
             Class_IAI.IAI_Check_Position = True
 
-            ClsIAI.Position_IAI(axis, txt_P2_Y.Text, txt_P2_X.Text)
+            ClsIAI.Position_IAI(axis, txt_P2_Y.Text, txt_P2_X.Text, txt_P2_Z.Text)
             ClsIAI.CheckIAIStatus()
 
             Class_IAI.IAI_Check_Position = False
