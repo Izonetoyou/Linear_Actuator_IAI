@@ -10,20 +10,19 @@ Public Class Class_IAI
     Private ReadySend As Boolean
 
     Friend Shared Position_Motor1, Position_Motor2 As Integer
-    Friend Shared IAIxStatus,
-                  IAIyStatus,
-                  IAIzStatus,
+    Friend Shared IAIJ1Status,
+                  IAIJ2Status,
+                  IAIJ3Status,
                   IAI_Check_Position As Boolean
 
-    Friend Shared IAIxPosition,
-                  IAIyPosition,
-                  IAIzPosition As Double
+    Friend Shared IAIJ1Position,
+                  IAIJ2Position,
+                  IAIJ3Position As Double
 
     Friend Shared IAI_Error_DoubleCmd As Boolean
     Friend Shared IAI_Enable_Dis As Boolean
 
-    Dim IAI_BlBfSlow As Boolean
-    Dim IAI_PisitionBfSlow As Double
+
 
     Friend Sub Connect_Port()
 
@@ -117,56 +116,79 @@ Public Class Class_IAI
             If tmp_check2 = "212" Then
                 sArry2 = CheckStatusTotal(tmp_check1).Split("_")
                 Select Case Class_Var.IAI.Axis
-                    Case "001"
+                    Case "001" 'J1
                         If sArry2(0) = "00011100" Or sArry2(0) = "00001100" Then
-                            IAIxStatus = True
+                            IAIJ1Status = True
                         Else
-                            IAIxStatus = False
+                            IAIJ1Status = False
 
                         End If
-                        IAIyStatus = True
-                        IAIzStatus = True
-                    Case "010"
+                        IAIJ2Status = True
+                        IAIJ3Status = True
+                    Case "010" 'J2
                         If sArry2(2) = "00011100" Or sArry2(2) = "00001100" Then
-                            IAIyStatus = True
+                            IAIJ2Status = True
                         Else
-                            IAIyStatus = False
+                            IAIJ2Status = False
                         End If
-                        IAIxStatus = True
-                        IAIzStatus = True
-                    Case "011"
-                        If sArry2(0) = "00011100" Or sArry2(0) = "00001100" Then
-                            IAIxStatus = True
-                        Else
-                            IAIxStatus = False
-
-                        End If
-
+                        IAIJ1Status = True
+                        IAIJ3Status = True
+                    Case "100" 'J3
                         If sArry2(2) = "00011100" Or sArry2(2) = "00001100" Then
-                            IAIyStatus = True
+                            IAIJ3Status = True
                         Else
-                            IAIyStatus = False
+                            IAIJ3Status = False
                         End If
-
-                        IAIzStatus = True
-                    Case "111"
-
+                        IAIJ1Status = True
+                        IAIJ2Status = True
+                    Case "011" 'XY
                         If sArry2(0) = "00011100" Or sArry2(0) = "00001100" Then
-                            IAIxStatus = True
+                            IAIJ1Status = True
                         Else
-                            IAIxStatus = False
+                            IAIJ1Status = False
 
                         End If
 
                         If sArry2(2) = "00011100" Or sArry2(2) = "00001100" Then
-                            IAIyStatus = True
+                            IAIJ2Status = True
                         Else
-                            IAIyStatus = False
+                            IAIJ2Status = False
+                        End If
+
+                        IAIJ3Status = True
+                    Case "101" 'ZX
+                        If sArry2(0) = "00011100" Or sArry2(0) = "00001100" Then
+                            IAIJ1Status = True
+                        Else
+                            IAIJ1Status = False
+
+                        End If
+
+                        If sArry2(2) = "00011100" Or sArry2(2) = "00001100" Then
+                            IAIJ3Status = True
+                        Else
+                            IAIJ3Status = False
+                        End If
+
+                        IAIJ2Status = True
+                    Case "111" 'ZYX
+
+                        If sArry2(0) = "00011100" Or sArry2(0) = "00001100" Then
+                            IAIJ1Status = True
+                        Else
+                            IAIJ1Status = False
+
+                        End If
+
+                        If sArry2(2) = "00011100" Or sArry2(2) = "00001100" Then
+                            IAIJ2Status = True
+                        Else
+                            IAIJ2Status = False
                         End If
                         If sArry2(4) = "00011100" Or sArry2(4) = "00001100" Then
-                            IAIzStatus = True
+                            IAIJ3Status = True
                         Else
-                            IAIzStatus = False
+                            IAIJ3Status = False
                         End If
                 End Select
 
@@ -178,46 +200,58 @@ Public Class Class_IAI
             If IAI_Check_Position = True Then
                 Dim Position() As String = Split(CheckStatusTotal(s1), "_")
                 Select Case Class_Var.IAI.Axis
-                    Case "001"
+                    Case "001" 'X
                         If Position.Length >= 2 Then
 
-                            IAIxPosition = Position(1)
-                            IAIxPosition = Math.Round(Val(IAIxPosition), 3)
+                            IAIJ1Position = Position(1)
+                            IAIJ1Position = Math.Round(Val(IAIJ1Position), 3)
 
                         End If
-                    Case "010"
+                    Case "010" 'Y
                         If Position.Length >= 2 Then
 
-
-                            IAIyPosition = Position(3)
-                            IAIyPosition = Math.Round(Val(IAIyPosition), 3)
-
-
+                            IAIJ2Position = Position(3)
+                            IAIJ2Position = Math.Round(Val(IAIJ2Position), 3)
 
                         End If
-                    Case "011"
+                    Case "100" 'Z
+                        If Position.Length >= 2 Then
+
+                            IAIJ3Position = Position(3)
+                            IAIJ3Position = Math.Round(Val(IAIJ3Position), 3)
+
+                        End If
+                    Case "011" 'YX
                         If Position.Length >= 4 Then
 
-                            IAIxPosition = Position(1)
-                            IAIxPosition = Math.Round(Val(IAIxPosition), 3)
+                            IAIJ1Position = Position(1)
+                            IAIJ1Position = Math.Round(Val(IAIJ1Position), 3)
 
-                            IAIyPosition = Position(3)
-                            IAIyPosition = Math.Round(Val(IAIyPosition), 3)
-
-
+                            IAIJ2Position = Position(3)
+                            IAIJ2Position = Math.Round(Val(IAIJ2Position), 3)
 
                         End If
-                    Case "111"
+                    Case "101" 'ZX
+                        If Position.Length >= 4 Then
+
+                            IAIJ1Position = Position(1)
+                            IAIJ1Position = Math.Round(Val(IAIJ1Position), 3)
+
+                            IAIJ3Position = Position(3)
+                            IAIJ3Position = Math.Round(Val(IAIJ3Position), 3)
+
+                        End If
+                    Case "111" 'ZYX
                         If Position.Length >= 6 Then
 
-                            IAIxPosition = Position(1)
-                            IAIxPosition = Math.Round(Val(IAIxPosition), 3)
+                            IAIJ1Position = Position(1)
+                            IAIJ1Position = Math.Round(Val(IAIJ1Position), 3)
 
-                            IAIyPosition = Position(3)
-                            IAIyPosition = Math.Round(Val(IAIyPosition), 3)
+                            IAIJ2Position = Position(3)
+                            IAIJ2Position = Math.Round(Val(IAIJ2Position), 3)
 
-                            IAIzPosition = Position(5)
-                            IAIzPosition = Math.Round(Val(IAIzPosition), 3)
+                            IAIJ3Position = Position(5)
+                            IAIJ3Position = Math.Round(Val(IAIJ3Position), 3)
 
                         End If
                 End Select
@@ -250,8 +284,6 @@ Public Class Class_IAI
 
     Friend Sub IAI_HOME()
 
-        IAI_BlBfSlow = False
-
         'Home IAI 
         IAI_SendCommandCheck = ""
         IAI_SendCommandCheck = Mid(Trim(HomeMotor_IAI(Class_Var.IAI.Address, Class_Var.IAI.Axis)), 4, 3)
@@ -278,24 +310,19 @@ Public Class Class_IAI
         Do
 
             If ReadySend = True Then
-
                 IAI_Send_Check_Status()
-
                 Delay(1000)
                 CountCommand += 1
-
                 If CountCommand > 50 Then
-
                     MessageBox.Show("IAI Overflow !")
                     Exit Sub
-
                 End If
 
             End If
 
             Application.DoEvents()
 
-        Loop Until IAIxStatus = True And IAIyStatus = True And IAIzStatus = True
+        Loop Until IAIJ1Status = True And IAIJ2Status = True And IAIJ3Status = True
         '------------------------------------ Check status of IAI
 
     End Sub
@@ -305,14 +332,8 @@ Public Class Class_IAI
         Dim CountCommand As Integer = 0
         Delay(100)
         Do
-            '----------------
-            'If blExit = True Then Exit Sub
-            '----------------
-
-
             If ReadySend = True Then
                 IAI_Send_Check_Status()
-
                 Delay(20)
                 CountCommand += 1
                 If CountCommand > 100 Then Return False
@@ -322,16 +343,12 @@ Public Class Class_IAI
             Application.DoEvents()
 
 
-        Loop Until IAIxStatus = True And IAIyStatus = True And IAIzStatus = True
+        Loop Until IAIJ1Status = True And IAIJ2Status = True And IAIJ3Status = True
 
         Return True
 
-
-
-
-
     End Function
-    Friend Function Position_IAI(axis As String, ByVal PosiY As String, ByVal PosiX As String, ByVal PosiZ As String)
+    Friend Function Position_IAI(axis As String, ByVal PosiJ2 As String, ByVal PosiJ1 As String, ByVal PosiJ3 As String)
 
         Dim ReSendCmd As Integer = 0
 
@@ -348,22 +365,22 @@ startt:
 
             IAI_SendCommandCheck = ""
             Form1.LbStatusDisplay.Text = ""
-            If Val(PosiX) >= 500 Or Val(PosiX) < -1 Then
-                Form1.LbStatusDisplay.Text = "X Position Over Limit"
+            If Val(PosiJ1) >= Class_Var.IAI.AxisJ1dimension Or Val(PosiJ1) < -1 Then
+                Form1.LbStatusDisplay.Text = "J1 Position Over Limit"
                 Exit Function
-            ElseIf Val(PosiY) >= 600 Or Val(PosiY) < -1 Then
-                Form1.LbStatusDisplay.Text = "Y Position Over Limit"
+            ElseIf Val(PosiJ2) >= Class_Var.IAI.AxisJ2dimension Or Val(PosiJ2) < -1 Then
+                Form1.LbStatusDisplay.Text = "J2 Position Over Limit"
                 Exit Function
-            ElseIf Val(PosiZ) >= 50 Or Val(PosiZ) < -1 Then
-                Form1.LbStatusDisplay.Text = "Z Position Over Limit"
+            ElseIf Val(PosiJ3) >= Class_Var.IAI.AxisJ3dimension Or Val(PosiJ3) < -1 Then
+                Form1.LbStatusDisplay.Text = "J3 Position Over Limit"
                 Exit Function
             End If
 
 
             If MPortIAI.IsOpen Then
 
-                IAI_SendCommandCheck = Mid(Trim(XYZMove(Class_Var.IAI.Address, axis, Val(PosiZ.Trim), Val(PosiY.Trim), Val(PosiX.Trim), Form1.Speedtextbox.Text, 0.5)), 4, 3)
-                MPortIAI.Write(XYZMove(Class_Var.IAI.Address, axis, Val(PosiZ.Trim), Val(PosiY.Trim), Val(PosiX.Trim), Form1.Speedtextbox.Text, 0.5))
+                IAI_SendCommandCheck = Mid(Trim(XYZMove(Class_Var.IAI.Address, axis, Val(PosiJ3.Trim), Val(PosiJ2.Trim), Val(PosiJ1.Trim), Form1.Speedtextbox.Text, 0.5)), 4, 3)
+                MPortIAI.Write(XYZMove(Class_Var.IAI.Address, axis, Val(PosiJ3.Trim), Val(PosiJ2.Trim), Val(PosiJ1.Trim), Form1.Speedtextbox.Text, 0.5))
 
 
                 Delay(20)
@@ -371,8 +388,8 @@ startt:
 
                 Try
                     MPortIAI.Open()
-                    IAI_SendCommandCheck = Mid(Trim(XYZMove(Class_Var.IAI.Address, axis, Val(PosiZ.Trim), Val(PosiY.Trim), Val(PosiX.Trim), Form1.Speedtextbox.Text, 0.5)), 4, 3)
-                    MPortIAI.Write(XYZMove(Class_Var.IAI.Address, axis, Val(PosiZ.Trim), Val(PosiY.Trim), Val(PosiX.Trim), Form1.Speedtextbox.Text, 0.5))
+                    IAI_SendCommandCheck = Mid(Trim(XYZMove(Class_Var.IAI.Address, axis, Val(PosiJ3.Trim), Val(PosiJ2.Trim), Val(PosiJ1.Trim), Form1.Speedtextbox.Text, 0.5)), 4, 3)
+                    MPortIAI.Write(XYZMove(Class_Var.IAI.Address, axis, Val(PosiJ3.Trim), Val(PosiJ2.Trim), Val(PosiJ1.Trim), Form1.Speedtextbox.Text, 0.5))
 
                     Delay(20)
                 Catch ex As Exception
@@ -421,13 +438,11 @@ startt:
         End If
 
     End Function
-    Friend Function JogFW_IAI(axis As String, ByVal PosiZ As String)
+    Friend Function JogFW_IAI(axis As String, ByVal PosiJ3 As String)
 
         IAI_SendCommandCheck = ""
-        If Val(PosiZ) <= 499 Then
+        If Val(PosiJ3) <= 499 Then
             If MPortIAI.IsOpen Then
-
-
 
                 IAI_SendCommandCheck = Mid(Trim(JogInDec(Class_Var.IAI.Address, axis, 0.3, Form1.Speedtextbox.Text, 0, True)), 4, 3)
                 MPortIAI.Write(JogInDec(Class_Var.IAI.Address, axis, 0.3, Form1.Speedtextbox.Text, 0, True))
@@ -449,8 +464,7 @@ startt:
 
             End If
         Else
-            'Form1.red_blink()
-            ' LampRed_ON()
+
             Form1.LbStatusDisplay.Text = "Position Over Limit"
 
         End If
@@ -459,12 +473,12 @@ startt:
 
     End Function
 
-    Friend Function JogRW_IAI(axis As String, ByVal PosiZ As String)
+    Friend Function JogRW_IAI(axis As String, ByVal PosiJ3 As String)
 
 
 
         IAI_SendCommandCheck = ""
-        If Val(PosiZ) >= 1 Then
+        If Val(PosiJ3) >= 1 Then
             If MPortIAI.IsOpen Then
 
                 IAI_SendCommandCheck = Mid(Trim(JogInDec(Class_Var.IAI.Address, axis, 0.5, Form1.Speedtextbox.Text, 0, False)), 4, 3)
@@ -532,19 +546,19 @@ startt:
 
     Private Function EachAxis(ByVal axis As String) As String
 
-        If (axis = "001") Then            ' Which axis will move         ' X = 01
+        If (axis = "001") Then            ' Which axis will move         ' J1 = 01
 
             axis = "01"
 
-        ElseIf (axis = "010") Then       ' Y = 02
+        ElseIf (axis = "010") Then       ' J2 = 02
 
             axis = "02"
 
-        ElseIf (axis = "011") Then       ' XY = 03
+        ElseIf (axis = "011") Then       ' J1J2 = 03
 
             axis = "03"
 
-        ElseIf (axis = "100") Then       ' Z = 04
+        ElseIf (axis = "100") Then       ' J3 = 04
 
             axis = "04"
 
@@ -654,6 +668,12 @@ startt:
 
         Return "!" + adrees + "25B2A" + vbCr + vbLf
 
+    End Function
+    Function IAI_Reset_Error(adrees As String)
+
+
+        Dim scHex As String = CheckSum("!" + adrees + "25B") ' Compute checksum
+        Return "!" + adrees + "25B" + scHex + vbCr + vbLf
     End Function
 
     Function JogInDec(adrees As String, ByVal zyx As String, ByVal accDcl As Double, ByVal speed As Integer, ByVal distance As Double, ByVal forwordReword As Boolean) As String
@@ -834,12 +854,7 @@ startt:
         Return allResult
 
     End Function
-    Function IAI_Reset_Error(adrees As String)
 
-
-        Dim scHex As String = CheckSum("!" + adrees + "25B") ' Compute checksum
-        Return "!" + adrees + "25B" + scHex + vbCr + vbLf
-    End Function
 
 
 #End Region

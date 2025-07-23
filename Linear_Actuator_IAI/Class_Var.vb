@@ -12,6 +12,9 @@
         Friend CboStop_IAI As String
         Friend Connect As Boolean
         Friend Speed As String
+        Friend AxisJ1dimension As String
+        Friend AxisJ2dimension As String
+        Friend AxisJ3dimension As String
     End Structure
 
 End Class

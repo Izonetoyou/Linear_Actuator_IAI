@@ -33,19 +33,19 @@
         With Clsini
             Dim axisValue As String = .IniGetValue(Section2, "Axis")
             Select Case axisValue
-                Case "X"
+                Case "J1"
                     Class_Var.IAI.Axis = "001"
-                Case "Y"
+                Case "J2"
                     Class_Var.IAI.Axis = "010"
-                Case "XY"
+                Case "J2J1"
                     Class_Var.IAI.Axis = "011"
-                Case "Z"
+                Case "J3"
                     Class_Var.IAI.Axis = "100"
-                Case "ZX"
+                Case "J3J1"
                     Class_Var.IAI.Axis = "101"
-                Case "ZY"
+                Case "J3J2"
                     Class_Var.IAI.Axis = "110"
-                Case "XYZ"
+                Case "J3J2J1"
                     Class_Var.IAI.Axis = "111"
             End Select
 
@@ -58,6 +58,12 @@
             Class_Var.IAI.CboStop_IAI = .IniGetValue(Section2, "STOPBIT")
             Class_Var.IAI.Speed = .IniGetValue(Section2, "SPEED")
             SpeedTeackbar.Value = Class_Var.IAI.Speed
+
+            Class_Var.IAI.AxisJ1dimension = .IniGetValue(Section2, "AxisJ1dimension")
+            Class_Var.IAI.AxisJ2dimension = .IniGetValue(Section2, "AxisJ2dimension")
+            Class_Var.IAI.AxisJ3dimension = .IniGetValue(Section2, "AxisJ3dimension")
+
+
         End With
 
 
@@ -120,32 +126,32 @@
 
         TimerIAI.Enabled = False
 
-        If Class_IAI.IAIxStatus = True Then
+        If Class_IAI.IAIJ1Status = True Then
 
-            lbStatusX.Text = "X = Ready"
+            lbStatusX.Text = "J1 = Ready"
 
         Else
-            lbStatusX.Text = "X = Busy !"
+            lbStatusX.Text = "J1 = Busy !"
 
         End If
-        If Class_IAI.IAIyStatus = True Then
-            lbStatusY.Text = "Y = Ready"
+        If Class_IAI.IAIJ2Status = True Then
+            lbStatusY.Text = "J2 = Ready"
 
         Else
-            lbStatusY.Text = "Y = Busy !"
+            lbStatusY.Text = "J2 = Busy !"
         End If
-        If Class_IAI.IAIzStatus = True Then
-            lbStatusZ.Text = "Y = Ready"
+        If Class_IAI.IAIJ3Status = True Then
+            lbStatusZ.Text = "J3 = Ready"
 
         Else
-            lbStatusZ.Text = "Y = Busy !"
+            lbStatusZ.Text = "J3 = Busy !"
         End If
         Class_IAI.IAI_Check_Position = ChkShoPosi.Checked
         If Class_IAI.IAI_Check_Position = True Or ChkShoPosi.Checked = True Then  'Class_IAI.IAI_Check_Position = True Or
 
-            lblXPosition.Text = Class_IAI.IAIxPosition
-            lblYPosition.Text = Class_IAI.IAIyPosition
-            lblZPosition.Text = Class_IAI.IAIzPosition
+            lblJ1Position.Text = Class_IAI.IAIJ1Position
+            lblJ2Position.Text = Class_IAI.IAIJ2Position
+            lblJ3Position.Text = Class_IAI.IAIJ3Position
         End If
         Speedtextbox.Text = SpeedTeackbar.Value
         If Class_IAI.IAI_Enable_Dis = True Then
@@ -172,39 +178,39 @@
     End Sub
 
 
-    Private Sub Bt_P_MOVE_MouseDown(sender As Object, e As MouseEventArgs) Handles BtX_P_MOVE.MouseDown, BtY_P_MOVE.MouseDown, BtZ_P_MOVE.MouseDown
+    Private Sub Bt_P_MOVE_MouseDown(sender As Object, e As MouseEventArgs) Handles BtJ1_P_MOVE.MouseDown, BtJ2_P_MOVE.MouseDown, BtJ3_P_MOVE.MouseDown
         Try
             Dim axis As String = Class_Var.IAI.Axis
             Dim axisbt As String = CType(sender, Button).Tag.ToString()
-            Dim PosiX As Double = CDbl(lblXPosition.Text)
-            Dim PosiY As Double = CDbl(lblYPosition.Text)
-            Dim PosiZ As Double = CDbl(lblZPosition.Text)
+            Dim PosiJ1 As Double = CDbl(lblJ1Position.Text)
+            Dim PosiJ2 As Double = CDbl(lblJ2Position.Text)
+            Dim PosiJ3 As Double = CDbl(lblJ3Position.Text)
             Class_IAI.IAI_Check_Position = True
 
             If bt_jogorfast.Text = "Jog" Then
                 Select Case axisbt
-                    Case "X"
+                    Case "J1"
                         axis = "001"
-                        ClsIAI.JogFW_IAI(axis, PosiX)
-                    Case "Y"
+                        ClsIAI.JogFW_IAI(axis, PosiJ1)
+                    Case "J2"
                         axis = "010"
 
-                        ClsIAI.JogFW_IAI(axis, PosiY)
-                    Case "Z"
+                        ClsIAI.JogFW_IAI(axis, PosiJ2)
+                    Case "J3"
                         axis = "100"
-                        ClsIAI.JogFW_IAI(axis, PosiZ)
+                        ClsIAI.JogFW_IAI(axis, PosiJ3)
                 End Select
             Else
                 Select Case axisbt
-                    Case "X"
-                        PosiX += CDbl(CboStep_Pos_IAI.Text)
-                    Case "Y"
-                        PosiY += CDbl(CboStep_Pos_IAI.Text)
-                    Case "Z"
-                        PosiZ += CDbl(CboStep_Pos_IAI.Text)
+                    Case "J1"
+                        PosiJ1 += CDbl(CboStep_Pos_IAI.Text)
+                    Case "J2"
+                        PosiJ2 += CDbl(CboStep_Pos_IAI.Text)
+                    Case "J3"
+                        PosiJ3 += CDbl(CboStep_Pos_IAI.Text)
                 End Select
 
-                ClsIAI.Position_IAI(axis, PosiY, PosiX, PosiZ)
+                ClsIAI.Position_IAI(axis, PosiJ2, PosiJ1, PosiJ3)
                 ClsIAI.CheckIAIStatus()
             End If
 
@@ -216,23 +222,23 @@
     End Sub
 
 
-    Private Sub Bt_P_MOVE_MouseUp(sender As Object, e As MouseEventArgs) Handles BtX_P_MOVE.MouseUp, BtY_P_MOVE.MouseUp, BtZ_P_MOVE.MouseUp
+    Private Sub Bt_P_MOVE_MouseUp(sender As Object, e As MouseEventArgs) Handles BtJ1_P_MOVE.MouseUp, BtJ2_P_MOVE.MouseUp, BtJ3_P_MOVE.MouseUp
         Try
             Dim axisbt As String = CType(sender, Button).Tag.ToString()
 
             If bt_jogorfast.Text = "Jog" Then
-                If axisbt = "X" Then
-                    BtX_P_MOVE.Enabled = False
+                If axisbt = "J1" Then
+                    BtJ1_P_MOVE.Enabled = False
                 Else
-                    BtY_P_MOVE.Enabled = False
+                    BtJ2_P_MOVE.Enabled = False
                 End If
 
                 ClsIAI.JogStop_IAI(Class_Var.IAI.Axis)
                 ClsIAI.IAI_Send_Check_Status()
                 ClsIAI.CheckIAIStatus()
 
-                BtX_P_MOVE.Enabled = True
-                BtY_P_MOVE.Enabled = True
+                BtJ1_P_MOVE.Enabled = True
+                BtJ2_P_MOVE.Enabled = True
             End If
 
         Catch ex As Exception
@@ -240,39 +246,39 @@
         End Try
     End Sub
 
-    Private Sub Bt_N_MOVE_MouseDown(sender As Object, e As MouseEventArgs) Handles BtX_N_MOVE.MouseDown, BtY_N_MOVE.MouseDown, BtZ_N_MOVE.MouseDown
+    Private Sub Bt_N_MOVE_MouseDown(sender As Object, e As MouseEventArgs) Handles BtJ1_N_MOVE.MouseDown, BtJ2_N_MOVE.MouseDown, BtJ3_N_MOVE.MouseDown
         Try
             Dim axis As String = Class_Var.IAI.Axis
             Dim axisbt As String = CType(sender, Button).Tag.ToString()
-            Dim PosiX As Double = CDbl(lblXPosition.Text)
-            Dim PosiY As Double = CDbl(lblYPosition.Text)
-            Dim PosiZ As Double = CDbl(lblZPosition.Text)
+            Dim PosiJ1 As Double = CDbl(lblJ1Position.Text)
+            Dim PosiJ2 As Double = CDbl(lblJ2Position.Text)
+            Dim PosiJ3 As Double = CDbl(lblJ3Position.Text)
 
             Class_IAI.IAI_Check_Position = True
 
             If bt_jogorfast.Text = "Jog" Then
                 Select Case axisbt
-                    Case "X"
+                    Case "J1"
                         axis = "001"
-                        ClsIAI.JogRW_IAI(axis, PosiX)
-                    Case "Y"
+                        ClsIAI.JogRW_IAI(axis, PosiJ1)
+                    Case "J2"
                         axis = "010"
-                        ClsIAI.JogRW_IAI(axis, PosiY)
-                    Case "Z"
+                        ClsIAI.JogRW_IAI(axis, PosiJ2)
+                    Case "J3"
                         axis = "100"
-                        ClsIAI.JogRW_IAI(axis, PosiZ)
+                        ClsIAI.JogRW_IAI(axis, PosiJ3)
                 End Select
             Else
                 Select Case axisbt
-                    Case "X"
-                        PosiX -= CDbl(CboStep_Pos_IAI.Text)
-                    Case "Y"
-                        PosiY -= CDbl(CboStep_Pos_IAI.Text)
-                    Case "Z"
-                        PosiZ -= CDbl(CboStep_Pos_IAI.Text)
+                    Case "J1"
+                        PosiJ1 -= CDbl(CboStep_Pos_IAI.Text)
+                    Case "J2"
+                        PosiJ2 -= CDbl(CboStep_Pos_IAI.Text)
+                    Case "J3"
+                        PosiJ3 -= CDbl(CboStep_Pos_IAI.Text)
                 End Select
 
-                ClsIAI.Position_IAI(axis, PosiY, PosiX, PosiZ)
+                ClsIAI.Position_IAI(axis, PosiJ2, PosiJ1, PosiJ3)
                 ClsIAI.CheckIAIStatus()
             End If
 
@@ -283,23 +289,23 @@
         End Try
     End Sub
 
-    Private Sub Bt_N_MOVE_MouseUp(sender As Object, e As MouseEventArgs) Handles BtX_N_MOVE.MouseUp, BtY_N_MOVE.MouseUp
+    Private Sub Bt_N_MOVE_MouseUp(sender As Object, e As MouseEventArgs) Handles BtJ1_N_MOVE.MouseUp, BtJ2_N_MOVE.MouseUp
         Try
             Dim axisbt As String = CType(sender, Button).Tag.ToString()
 
             If bt_jogorfast.Text = "Jog" Then
-                If axisbt = "X" Then
-                    BtX_N_MOVE.Enabled = False
+                If axisbt = "J1" Then
+                    BtJ1_N_MOVE.Enabled = False
                 Else
-                    BtY_N_MOVE.Enabled = False
+                    BtJ2_N_MOVE.Enabled = False
                 End If
 
                 ClsIAI.JogStop_IAI(Class_Var.IAI.Axis)
                 ClsIAI.IAI_Send_Check_Status()
                 ClsIAI.CheckIAIStatus()
 
-                BtX_N_MOVE.Enabled = True
-                BtY_N_MOVE.Enabled = True
+                BtJ1_N_MOVE.Enabled = True
+                BtJ2_N_MOVE.Enabled = True
             End If
 
         Catch ex As Exception
@@ -340,13 +346,9 @@
     Private Sub bt_P1_Click(sender As Object, e As EventArgs) Handles bt_P1.Click
         Try
             Dim axis As String = Class_Var.IAI.Axis
-
-
             Class_IAI.IAI_Check_Position = True
-
-            ClsIAI.Position_IAI(axis, txt_P1_Y.Text, txt_P1_X.Text, txt_P1_Z.Text)
+            ClsIAI.Position_IAI(axis, txt_P1_J2.Text, txt_P1_J1.Text, txt_P1_J3.Text)
             ClsIAI.CheckIAIStatus()
-
             Class_IAI.IAI_Check_Position = False
 
         Catch ex As Exception
@@ -360,7 +362,7 @@
 
             Class_IAI.IAI_Check_Position = True
 
-            ClsIAI.Position_IAI(axis, txt_P2_Y.Text, txt_P2_X.Text, txt_P2_Z.Text)
+            ClsIAI.Position_IAI(axis, txt_P2_J2.Text, txt_P2_J1.Text, txt_P2_J3.Text)
             ClsIAI.CheckIAIStatus()
 
             Class_IAI.IAI_Check_Position = False
@@ -370,4 +372,16 @@
         End Try
     End Sub
 
+
+
+    Private Sub Form1_FormClosing(sender As Object, e As FormClosingEventArgs) Handles MyBase.FormClosing
+        ClsIAI.Disconnect_Port()
+
+        If Class_Var.IAI.Connect = False Then
+            BtCon_IAI.Text = "Connect"
+            Show_Label_ToolStrip("IAI", "IAI Status : Disconnect.", Color.Red)
+        Else
+
+        End If
+    End Sub
 End Class
