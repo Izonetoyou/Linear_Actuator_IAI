@@ -49,7 +49,7 @@
                     Class_Var.IAI.Axis = "111"
             End Select
 
-
+            Class_Var.IAI.Address = .IniGetValue(Section2, "ADDRESS")
 
             Class_Var.IAI.CboPort_IAI = .IniGetValue(Section2, "COMPORT")
             Class_Var.IAI.CboRate_IAI = .IniGetValue(Section2, "BAUDRATE")
@@ -188,6 +188,7 @@
                         ClsIAI.JogFW_IAI(axis, PosiX)
                     Case "Y"
                         axis = "010"
+
                         ClsIAI.JogFW_IAI(axis, PosiY)
                     Case "Z"
                         axis = "100"

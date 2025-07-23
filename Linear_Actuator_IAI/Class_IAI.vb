@@ -115,42 +115,113 @@ Public Class Class_IAI
             End If
 
             If tmp_check2 = "212" Then
-
                 sArry2 = CheckStatusTotal(tmp_check1).Split("_")
-                If sArry2(0) = "00011100" Or sArry2(0) = "00001100" Then
-                    IAIxStatus = True
-                Else
-                    IAIxStatus = False
+                Select Case Class_Var.IAI.Axis
+                    Case "001"
+                        If sArry2(0) = "00011100" Or sArry2(0) = "00001100" Then
+                            IAIxStatus = True
+                        Else
+                            IAIxStatus = False
 
-                End If
+                        End If
+                        IAIyStatus = True
+                        IAIzStatus = True
+                    Case "010"
+                        If sArry2(2) = "00011100" Or sArry2(2) = "00001100" Then
+                            IAIyStatus = True
+                        Else
+                            IAIyStatus = False
+                        End If
+                        IAIxStatus = True
+                        IAIzStatus = True
+                    Case "011"
+                        If sArry2(0) = "00011100" Or sArry2(0) = "00001100" Then
+                            IAIxStatus = True
+                        Else
+                            IAIxStatus = False
 
-                If sArry2(2) = "00011100" Or sArry2(2) = "00001100" Then
-                    IAIyStatus = True
-                Else
-                    IAIyStatus = False
-                End If
-                If sArry2(4) = "00011100" Or sArry2(4) = "00001100" Then
-                    IAIzStatus = True
-                Else
-                    IAIzStatus = False
-                End If
+                        End If
+
+                        If sArry2(2) = "00011100" Or sArry2(2) = "00001100" Then
+                            IAIyStatus = True
+                        Else
+                            IAIyStatus = False
+                        End If
+
+                        IAIzStatus = True
+                    Case "111"
+
+                        If sArry2(0) = "00011100" Or sArry2(0) = "00001100" Then
+                            IAIxStatus = True
+                        Else
+                            IAIxStatus = False
+
+                        End If
+
+                        If sArry2(2) = "00011100" Or sArry2(2) = "00001100" Then
+                            IAIyStatus = True
+                        Else
+                            IAIyStatus = False
+                        End If
+                        If sArry2(4) = "00011100" Or sArry2(4) = "00001100" Then
+                            IAIzStatus = True
+                        Else
+                            IAIzStatus = False
+                        End If
+                End Select
+
+
+
 
             End If
 
             If IAI_Check_Position = True Then
                 Dim Position() As String = Split(CheckStatusTotal(s1), "_")
-                If Position.Length >= 4 Then
+                Select Case Class_Var.IAI.Axis
+                    Case "001"
+                        If Position.Length >= 2 Then
 
-                    IAIxPosition = Position(1)
-                    IAIxPosition = Math.Round(Val(IAIxPosition), 3)
+                            IAIxPosition = Position(1)
+                            IAIxPosition = Math.Round(Val(IAIxPosition), 3)
 
-                    IAIyPosition = Position(3)
-                    IAIyPosition = Math.Round(Val(IAIyPosition), 3)
+                        End If
+                    Case "010"
+                        If Position.Length >= 2 Then
 
-                    IAIzPosition = Position(5)
-                    IAIzPosition = Math.Round(Val(IAIzPosition), 3)
 
-                End If
+                            IAIyPosition = Position(3)
+                            IAIyPosition = Math.Round(Val(IAIyPosition), 3)
+
+
+
+                        End If
+                    Case "011"
+                        If Position.Length >= 4 Then
+
+                            IAIxPosition = Position(1)
+                            IAIxPosition = Math.Round(Val(IAIxPosition), 3)
+
+                            IAIyPosition = Position(3)
+                            IAIyPosition = Math.Round(Val(IAIyPosition), 3)
+
+
+
+                        End If
+                    Case "111"
+                        If Position.Length >= 6 Then
+
+                            IAIxPosition = Position(1)
+                            IAIxPosition = Math.Round(Val(IAIxPosition), 3)
+
+                            IAIyPosition = Position(3)
+                            IAIyPosition = Math.Round(Val(IAIyPosition), 3)
+
+                            IAIzPosition = Position(5)
+                            IAIzPosition = Math.Round(Val(IAIzPosition), 3)
+
+                        End If
+                End Select
+
             End If
 
         End If
@@ -160,7 +231,7 @@ Public Class Class_IAI
 
     Friend Sub IAI_Enable()
         If MPortIAI.IsOpen Then
-            MPortIAI.Write(ServoOnOff(Class_Var.IAI.Axis, True))
+            MPortIAI.Write(ServoOnOff(Class_Var.IAI.Address, Class_Var.IAI.Axis, True))
             Delay(300)
             IAI_Enable_Dis = True
             'BtEnable_IAI.Text = "Disable"
@@ -170,7 +241,7 @@ Public Class Class_IAI
     Friend Sub IAI_Disable()
         If MPortIAI.IsOpen Then
 
-            MPortIAI.Write(ServoOnOff(Class_Var.IAI.Axis, False))
+            MPortIAI.Write(ServoOnOff(Class_Var.IAI.Address, Class_Var.IAI.Axis, False))
             Delay(300)
             IAI_Enable_Dis = False
             'BtEnable_IAI.Text = "Enable"
@@ -183,23 +254,21 @@ Public Class Class_IAI
 
         'Home IAI 
         IAI_SendCommandCheck = ""
-        IAI_SendCommandCheck = Mid(Trim(HomeMotor_IAI(Class_Var.IAI.Axis)), 4, 3)
-        MPortIAI.Write(HomeMotor_IAI(Class_Var.IAI.Axis))
+        IAI_SendCommandCheck = Mid(Trim(HomeMotor_IAI(Class_Var.IAI.Address, Class_Var.IAI.Axis)), 4, 3)
+        MPortIAI.Write(HomeMotor_IAI(Class_Var.IAI.Address, Class_Var.IAI.Axis))
         Delay(3000)
-
-
 
     End Sub
     Friend Sub IAI_ResetError()
         If MPortIAI.IsOpen Then
-            MPortIAI.Write(IAI_Reset_Error())
+            MPortIAI.Write(IAI_Reset_Error(Class_Var.IAI.Address))
         End If
     End Sub
     Friend Sub IAI_Send_Check_Status()
 
         IAI_SendCommandCheck = ""
-        IAI_SendCommandCheck = Mid(Trim(AxisStatus(Class_Var.IAI.Axis)), 4, 3)
-        MPortIAI.Write(AxisStatus(Class_Var.IAI.Axis))
+        IAI_SendCommandCheck = Mid(Trim(AxisStatus(Class_Var.IAI.Address, Class_Var.IAI.Axis)), 4, 3)
+        MPortIAI.Write(AxisStatus(Class_Var.IAI.Address, Class_Var.IAI.Axis))
 
     End Sub
 
@@ -226,7 +295,7 @@ Public Class Class_IAI
 
             Application.DoEvents()
 
-        Loop Until IAIxStatus = True And IAIyStatus = True ' And IAIzStatus = True
+        Loop Until IAIxStatus = True And IAIyStatus = True And IAIzStatus = True
         '------------------------------------ Check status of IAI
 
     End Sub
@@ -253,7 +322,7 @@ Public Class Class_IAI
             Application.DoEvents()
 
 
-        Loop Until IAIxStatus = True And IAIyStatus = True 'And IAIzStatus = True
+        Loop Until IAIxStatus = True And IAIyStatus = True And IAIzStatus = True
 
         Return True
 
@@ -293,8 +362,8 @@ startt:
 
             If MPortIAI.IsOpen Then
 
-                IAI_SendCommandCheck = Mid(Trim(XYZMove(axis, Val(PosiZ.Trim), Val(PosiY.Trim), Val(PosiX.Trim), Form1.Speedtextbox.Text, 0.5)), 4, 3)
-                MPortIAI.Write(XYZMove(axis, Val(PosiZ.Trim), Val(PosiY.Trim), Val(PosiX.Trim), Form1.Speedtextbox.Text, 0.5))
+                IAI_SendCommandCheck = Mid(Trim(XYZMove(Class_Var.IAI.Address, axis, Val(PosiZ.Trim), Val(PosiY.Trim), Val(PosiX.Trim), Form1.Speedtextbox.Text, 0.5)), 4, 3)
+                MPortIAI.Write(XYZMove(Class_Var.IAI.Address, axis, Val(PosiZ.Trim), Val(PosiY.Trim), Val(PosiX.Trim), Form1.Speedtextbox.Text, 0.5))
 
 
                 Delay(20)
@@ -302,8 +371,8 @@ startt:
 
                 Try
                     MPortIAI.Open()
-                    IAI_SendCommandCheck = Mid(Trim(XYZMove(axis, Val(PosiZ.Trim), Val(PosiY.Trim), Val(PosiX.Trim), Form1.Speedtextbox.Text, 0.5)), 4, 3)
-                    MPortIAI.Write(XYZMove(axis, Val(PosiZ.Trim), Val(PosiY.Trim), Val(PosiX.Trim), Form1.Speedtextbox.Text, 0.5))
+                    IAI_SendCommandCheck = Mid(Trim(XYZMove(Class_Var.IAI.Address, axis, Val(PosiZ.Trim), Val(PosiY.Trim), Val(PosiX.Trim), Form1.Speedtextbox.Text, 0.5)), 4, 3)
+                    MPortIAI.Write(XYZMove(Class_Var.IAI.Address, axis, Val(PosiZ.Trim), Val(PosiY.Trim), Val(PosiX.Trim), Form1.Speedtextbox.Text, 0.5))
 
                     Delay(20)
                 Catch ex As Exception
@@ -331,16 +400,16 @@ startt:
         IAI_SendCommandCheck = ""
         If MPortIAI.IsOpen Then
 
-            IAI_SendCommandCheck = Mid(Trim(StopMotor_IAI(axis)), 4, 3)
-            MPortIAI.Write(StopMotor_IAI(axis))
+            IAI_SendCommandCheck = Mid(Trim(StopMotor_IAI(Class_Var.IAI.Address, axis)), 4, 3)
+            MPortIAI.Write(StopMotor_IAI(Class_Var.IAI.Address, axis))
             Delay(20)
 
         Else
 
             Try
                 MPortIAI.Open()
-                IAI_SendCommandCheck = Mid(Trim(StopMotor_IAI(axis)), 4, 3)
-                MPortIAI.Write(StopMotor_IAI(axis))
+                IAI_SendCommandCheck = Mid(Trim(StopMotor_IAI(Class_Var.IAI.Address, axis)), 4, 3)
+                MPortIAI.Write(StopMotor_IAI(Class_Var.IAI.Address, axis))
                 Delay(20)
             Catch ex As Exception
 
@@ -360,16 +429,16 @@ startt:
 
 
 
-                IAI_SendCommandCheck = Mid(Trim(JogInDec(axis, 0.3, Form1.Speedtextbox.Text, 0, True)), 4, 3)
-                MPortIAI.Write(JogInDec(axis, 0.3, Form1.Speedtextbox.Text, 0, True))
+                IAI_SendCommandCheck = Mid(Trim(JogInDec(Class_Var.IAI.Address, axis, 0.3, Form1.Speedtextbox.Text, 0, True)), 4, 3)
+                MPortIAI.Write(JogInDec(Class_Var.IAI.Address, axis, 0.3, Form1.Speedtextbox.Text, 0, True))
                 Delay(20)
             Else
 
                 Try
                     MPortIAI.Open()
 
-                    IAI_SendCommandCheck = Mid(Trim(JogInDec(axis, 0.3, Form1.Speedtextbox.Text, 0, True)), 4, 3)
-                    MPortIAI.Write(JogInDec(axis, 0.3, Form1.Speedtextbox.Text, 0, True))
+                    IAI_SendCommandCheck = Mid(Trim(JogInDec(Class_Var.IAI.Address, axis, 0.3, Form1.Speedtextbox.Text, 0, True)), 4, 3)
+                    MPortIAI.Write(JogInDec(Class_Var.IAI.Address, axis, 0.3, Form1.Speedtextbox.Text, 0, True))
                     Delay(20)
                 Catch ex As Exception
 
@@ -398,16 +467,16 @@ startt:
         If Val(PosiZ) >= 1 Then
             If MPortIAI.IsOpen Then
 
-                IAI_SendCommandCheck = Mid(Trim(JogInDec(axis, 0.5, Form1.Speedtextbox.Text, 0, False)), 4, 3)
-                MPortIAI.Write(JogInDec(axis, 0.5, Form1.Speedtextbox.Text, 0, False))
+                IAI_SendCommandCheck = Mid(Trim(JogInDec(Class_Var.IAI.Address, axis, 0.5, Form1.Speedtextbox.Text, 0, False)), 4, 3)
+                MPortIAI.Write(JogInDec(Class_Var.IAI.Address, axis, 0.5, Form1.Speedtextbox.Text, 0, False))
                 Delay(20)
             Else
 
                 Try
                     MPortIAI.Open()
 
-                    IAI_SendCommandCheck = Mid(Trim(JogInDec(axis, 0.5, Form1.Speedtextbox.Text, 0, False)), 4, 3)
-                    MPortIAI.Write(JogInDec(axis, 0.5, Form1.Speedtextbox.Text, 0, False))
+                    IAI_SendCommandCheck = Mid(Trim(JogInDec(Class_Var.IAI.Address, axis, 0.5, Form1.Speedtextbox.Text, 0, False)), 4, 3)
+                    MPortIAI.Write(JogInDec(Class_Var.IAI.Address, axis, 0.5, Form1.Speedtextbox.Text, 0, False))
                     Delay(20)
                 Catch ex As Exception
 
@@ -500,7 +569,7 @@ startt:
 
     End Function
 
-    Function XYZMove(zyx As String, ByVal distanceZ As Double, ByVal distanceY As Double, ByVal distanceX As Double, ByVal speed As Integer, ByVal accDcl As Double) As String
+    Function XYZMove(adrees As String, zyx As String, ByVal distanceZ As Double, ByVal distanceY As Double, ByVal distanceX As Double, ByVal speed As Integer, ByVal accDcl As Double) As String
         Dim distanceHex As String
         Dim axis = EachAxis(zyx)
 
@@ -543,13 +612,13 @@ startt:
 
         Dim speedHex As String = Right("00000000" + DecToHex(speed), 4)                         'mm/s
         Dim accDclHex As String = Right("00000000" + DecToHex(Convert.ToInt32(accDcl * 100)), 4)               'G
-        Dim scHex As String = CheckSum("!00234" + axis + accDclHex + accDclHex + speedHex + distanceHex)    'Check sum
+        Dim scHex As String = CheckSum("!" + adrees + "234" + axis + accDclHex + accDclHex + speedHex + distanceHex)    'Check sum
 
-        Return ("!00234" + axis + accDclHex + accDclHex + speedHex + distanceHex + scHex + vbCr + vbLf)
+        Return ("!" + adrees + "234" + axis + accDclHex + accDclHex + speedHex + distanceHex + scHex + vbCr + vbLf)
 
     End Function
 
-    Function ServoOnOff(ByVal zyx As String, ByVal OnOff As Boolean) As String
+    Function ServoOnOff(adrees As String, ByVal zyx As String, ByVal OnOff As Boolean) As String
 
         Dim axis = EachAxis(zyx)
 
@@ -562,32 +631,32 @@ startt:
 
         End If
 
-        Dim scHex As String = CheckSum("!00232" + axis + ofStatus)    'Check sum
-        Return ("!00232" + axis + ofStatus + scHex + vbCr + vbLf)
+        Dim scHex As String = CheckSum("!" + adrees + "232" + axis + ofStatus)    'Check sum
+        Return ("!" + adrees + "232" + axis + ofStatus + scHex + vbCr + vbLf)
 
     End Function
 
-    Function HomeMotor_IAI(ByVal zyx As String)
+    Function HomeMotor_IAI(adrees As String, ByVal zyx As String)
 
         Dim axis = EachAxis(zyx)
-        Dim scHex As String = CheckSum("!00233" + axis + "000000")    'Check sum
-        Return ("!00233" + axis + "000000" + scHex + vbCr + vbLf)
+        Dim scHex As String = CheckSum("!" + adrees + "233" + axis + "000000")    'Check sum
+        Return ("!" + adrees + "233" + axis + "000000" + scHex + vbCr + vbLf)
 
     End Function
 
-    Function Alarm_IAI_Reset() As String
+    Function Alarm_IAI_Reset(adrees As String) As String
 
-        Return "!002521A" + vbCr + vbLf
-
-    End Function
-
-    Function Software_IAI_Reset() As String
-
-        Return "!0025B2A" + vbCr + vbLf
+        Return "!" + adrees + "2521A" + vbCr + vbLf
 
     End Function
 
-    Function JogInDec(ByVal zyx As String, ByVal accDcl As Double, ByVal speed As Integer, ByVal distance As Double, ByVal forwordReword As Boolean) As String
+    Function Software_IAI_Reset(adrees As String) As String
+
+        Return "!" + adrees + "25B2A" + vbCr + vbLf
+
+    End Function
+
+    Function JogInDec(adrees As String, ByVal zyx As String, ByVal accDcl As Double, ByVal speed As Integer, ByVal distance As Double, ByVal forwordReword As Boolean) As String
 
         Dim axis = EachAxis(zyx)
         Dim distanceHex As String
@@ -621,27 +690,27 @@ startt:
 
         Dim speedHex As String = Right("00000000" + DecToHex(speed), 4)                                         'mm/s
         Dim accDclHex As String = Right("00000000" + DecToHex(Convert.ToInt32(accDcl * 100)), 4)                'G
-        Dim scHex As String = CheckSum("!00236" + axis + accDclHex + accDclHex + speedHex + distanceHex + moveFR)    'Check sum
+        Dim scHex As String = CheckSum("!" + adrees + "236" + axis + accDclHex + accDclHex + speedHex + distanceHex + moveFR)    'Check sum
 
-        Return "!00236" + axis + accDclHex + accDclHex + speedHex + distanceHex + moveFR + scHex + vbCr + vbLf
-
-    End Function
-
-    Function StopMotor_IAI(ByVal zyx As String) As String
-
-        Dim axis = EachAxis(zyx)
-        Dim scHex As String = CheckSum("!00238" + axis + "00")    'Check sum
-        Debug.Print("!00238" + axis + "00" + scHex + vbCr + vbLf)
-        Return "!00238" + axis + "00" + scHex + vbCr + vbLf
+        Return "!" + adrees + "236" + axis + accDclHex + accDclHex + speedHex + distanceHex + moveFR + scHex + vbCr + vbLf
 
     End Function
 
-    Function AxisStatus(ByVal zyx As String) As String
+    Function StopMotor_IAI(adrees As String, ByVal zyx As String) As String
 
         Dim axis = EachAxis(zyx)
-        Dim scHex As String = CheckSum("!00212" + axis)    'Check sum
+        Dim scHex As String = CheckSum("!" + adrees + "238" + axis + "00")    'Check sum
+        Debug.Print("!" + adrees + "238" + axis + "00" + scHex + vbCr + vbLf)
+        Return "!" + adrees + "238" + axis + "00" + scHex + vbCr + vbLf
 
-        Return "!00212" + axis + scHex + vbCr + vbLf
+    End Function
+
+    Function AxisStatus(adrees As String, ByVal zyx As String) As String
+
+        Dim axis = EachAxis(zyx)
+        Dim scHex As String = CheckSum("!" + adrees + "212" + axis)    'Check sum
+
+        Return "!" + adrees + "212" + axis + scHex + vbCr + vbLf
 
 
     End Function
@@ -765,11 +834,11 @@ startt:
         Return allResult
 
     End Function
-    Function IAI_Reset_Error()
+    Function IAI_Reset_Error(adrees As String)
 
 
-        Dim scHex As String = CheckSum("!0025B") ' Compute checksum
-        Return "!0025B" + scHex + vbCr + vbLf
+        Dim scHex As String = CheckSum("!" + adrees + "25B") ' Compute checksum
+        Return "!" + adrees + "25B" + scHex + vbCr + vbLf
     End Function
 
 

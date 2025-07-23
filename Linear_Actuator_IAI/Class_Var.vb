@@ -4,6 +4,7 @@
 
     Structure List_IAI_Control
         Friend Axis As String
+        Friend Address As String
         Friend CboPort_IAI As String
         Friend CboRate_IAI As String
         Friend CboData_IAI As String
